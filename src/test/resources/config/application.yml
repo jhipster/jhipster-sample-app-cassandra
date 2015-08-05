@@ -1,0 +1,46 @@
+server:
+    port: 10344
+    address: localhost
+
+
+# security configuration (this key should be unique for your application, and kept secret)
+jhipster.security.rememberme.key: 9cd465cf5c2009c6d3ba029649816089201b55fb
+
+async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+
+liquibase:
+    context: test
+
+spring:
+    data:
+        cassandra:
+            contactPoints: localhost
+            port: 9142
+            protocolVersion: V2
+            compression: NONE
+            keyspaceName: cassandra_unit_keyspace
+
+mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    protocol: smtp
+    tls: false
+    auth: false
+
+metrics:
+    jmx.enabled: false
+
+swagger:
+    apiDocsLocation: http://localhost:8080
+    title: jhipster API
+    version: 0.0.1
+    description: jhipster applications and beyond!
+    termsOfServiceUrl: http://jhipster.github.io/
+    contact:
+    license: Apache 2.0
+    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
