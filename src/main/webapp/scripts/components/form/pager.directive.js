@@ -1,8 +1,8 @@
 /* globals $ */
 'use strict';
 
-angular.module('jhipsterApp')
-    .directive('jhipsterAppPager', function() {
+angular.module('samplecassandraApp')
+    .directive('samplecassandraAppPager', function() {
         return {
             templateUrl: 'scripts/components/form/pager.html'
         };

@@ -1,7 +1,7 @@
 {
-  "name": "jhipster",
+  "name": "samplecassandra",
   "version": "0.0.0",
-  "description": "Description for jhipster",
+  "description": "Description for sampleCassandra",
   "private": true,
   "dependencies": {
   },

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('samplecassandraApp')
     .factory('Register', function ($resource) {
         return $resource('api/register', {}, {
         });

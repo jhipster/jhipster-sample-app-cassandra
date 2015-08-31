@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('samplecassandraApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('home', {
