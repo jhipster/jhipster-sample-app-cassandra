@@ -22,7 +22,7 @@ public class User implements Serializable {
     private String id;
 
     @NotNull
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @Size(min = 1, max = 50)
     private String login;
 

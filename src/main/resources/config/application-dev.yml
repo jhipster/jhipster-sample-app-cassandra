@@ -31,4 +31,3 @@ metrics:
         port: 2003
         prefix: sampleCassandra
 
-

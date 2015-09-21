@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class UserRepository {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
 
-    public void save(User user) {
+    public User save(User user) {
         User oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
@@ -177,6 +178,7 @@ public class UserRepository {
             .setString("email", user.getEmail())
             .setString("id", user.getId()));
         session.execute(batch);
+        return user;
     }
 
     public void delete(User user) {

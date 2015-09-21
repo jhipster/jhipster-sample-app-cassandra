@@ -24,6 +24,11 @@ mail:
     from: sampleCassandra@localhost
 
 
+spring:
+    mvc:
+        favicon:
+            enabled: false
+
 swagger:
     title: sampleCassandra API
     description: sampleCassandra applications and beyond!

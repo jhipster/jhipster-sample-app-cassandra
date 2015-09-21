@@ -1,4 +1,4 @@
-# Developping sampleCassandra
+# Developing sampleCassandra
 
 sampleCassandra was generated using JHipster, you can find documentation and help at [JHipster][].
 
@@ -63,7 +63,7 @@ To setup this project in Jenkins, use the following configuration:
 * Post-build Actions
     * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml`
 
-[JHipster]: https://jhipster.gitub.io/
+[JHipster]: https://jhipster.github.io/
 [Node.js]: https://nodejs.org/
 [Bower]: http://bower.io/
 [Grunt]: http://gruntjs.com/

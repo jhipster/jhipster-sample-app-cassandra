@@ -7,7 +7,7 @@ angular.module('samplecassandraApp')
                 parent: 'site',
                 url: '/',
                 data: {
-                    roles: []
+                    authorities: []
                 },
                 views: {
                     'content@': {

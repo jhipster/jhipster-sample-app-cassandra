@@ -7,7 +7,7 @@ angular.module('samplecassandraApp')
                 parent: 'account',
                 url: '/logout',
                 data: {
-                    roles: []
+                    authorities: []
                 },
                 views: {
                     'content@': {
