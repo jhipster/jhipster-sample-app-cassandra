@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.web.rest.dto.ManagedUserDTO;
 import com.mycompany.myapp.web.rest.dto.UserDTO;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -85,10 +86,10 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<UserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
+    public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
         log.debug("REST request to update User : {}", managedUserDTO);
-        return Optional.of(userRepository
-            .findOne(managedUserDTO.getId()))
+        return userRepository
+            .findOne(managedUserDTO.getId())
             .map(user -> {
                 user.setLogin(managedUserDTO.getLogin());
                 user.setFirstName(managedUserDTO.getFirstName());
@@ -101,7 +102,7 @@ public class UserResource {
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOne(managedUserDTO.getId())));
+                        .findOne(managedUserDTO.getId()).get()));
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
@@ -113,13 +114,13 @@ public class UserResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<UserDTO>> getAllUsers()
+    public ResponseEntity<List<ManagedUserDTO>> getAllUsers()
         throws URISyntaxException {
         List<User> users = userRepository.findAll();
-        List<UserDTO> userDTOs = users.stream()
-            .map(user -> new UserDTO(user))
+        List<ManagedUserDTO> managedUserDTOs = users.stream()
+            .map(user -> new ManagedUserDTO(user))
             .collect(Collectors.toList());
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(managedUserDTOs, HttpStatus.OK);
     }
 
     /**
@@ -129,11 +130,11 @@ public class UserResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
+    public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> new UserDTO(user))
-                .map(userDTO -> new ResponseEntity<>(userDTO, HttpStatus.OK))
+                .map(user -> new ManagedUserDTO(user))
+                .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
