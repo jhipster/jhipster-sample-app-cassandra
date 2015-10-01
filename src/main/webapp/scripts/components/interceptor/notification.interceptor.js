@@ -9,6 +9,6 @@ angular.module('samplecassandraApp')
                     AlertService.success(alertKey, { param : response.headers('X-samplecassandraApp-params')});
                 }
                 return response;
-            },
+            }
         };
     });

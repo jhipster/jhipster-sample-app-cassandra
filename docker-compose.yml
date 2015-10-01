@@ -1,0 +1,12 @@
+jhipster-dev-cassandra:
+  container_name: sampleCassandra-dev-cassandra
+  build: .
+  # volumes:
+  # - ~/volumes/jhipster/sampleCassandra/dev-cassandra/:/var/lib/cassandra/data
+  ports:
+  - "7000:7000"
+  - "7001:7001"
+  - "7199:7199"
+  - "9042:9042"
+  - "9160:9160"
+
