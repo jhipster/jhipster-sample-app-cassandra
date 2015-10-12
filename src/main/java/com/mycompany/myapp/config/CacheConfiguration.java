@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = {MetricsConfiguration.class})
+@AutoConfigureAfter(value = { MetricsConfiguration.class })
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class CacheConfiguration {
 

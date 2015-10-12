@@ -26,6 +26,8 @@ spring:
             protocolVersion: V2
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
+    mail:
+        host: localhost
     mvc:
         favicon:
             enabled: false
@@ -52,15 +54,6 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
-        from: sampleCassandra@localhost
     security:
         rememberme:
             # security key (this key should be unique for your application, and kept secret)

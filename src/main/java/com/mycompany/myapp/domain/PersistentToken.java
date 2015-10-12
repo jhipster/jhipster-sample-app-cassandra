@@ -1,8 +1,6 @@
 package com.mycompany.myapp.domain;
 
-import com.datastax.driver.mapping.annotations.Column;
-import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.datastax.driver.mapping.annotations.Table;
+import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.LocalDate;
@@ -144,11 +142,11 @@ public class PersistentToken implements Serializable {
     @Override
     public String toString() {
         return "PersistentToken{" +
-                "series='" + series + '\'' +
-                ", tokenValue='" + tokenValue + '\'' +
-                ", tokenDate=" + tokenDate +
-                ", ipAddress='" + ipAddress + '\'' +
-                ", userAgent='" + userAgent + '\'' +
-                "}";
+            "series='" + series + '\'' +
+            ", tokenValue='" + tokenValue + '\'' +
+            ", tokenDate=" + tokenDate +
+            ", ipAddress='" + ipAddress + '\'' +
+            ", userAgent='" + userAgent + '\'' +
+            "}";
     }
 }
