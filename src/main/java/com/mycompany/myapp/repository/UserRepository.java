@@ -5,7 +5,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.mycompany.myapp.domain.User;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import java.util.List;
 import java.util.Optional;

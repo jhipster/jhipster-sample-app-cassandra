@@ -5,7 +5,7 @@ import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.util.RandomUtil;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -49,8 +49,8 @@ public class UserService {
 
        return userRepository.findOneByResetKey(key)
             .filter(user -> {
-                DateTime oneDayAgo = DateTime.now().minusHours(24);
-                return user.getResetDate().after(oneDayAgo.toDate());
+                ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
+                return user.getResetDate().after(Date.from(oneDayAgo.toInstant()));
            })
            .map(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
