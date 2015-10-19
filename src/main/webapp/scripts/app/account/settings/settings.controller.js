@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('samplecassandraApp')
+angular.module('sampleCassandraApp')
     .controller('SettingsController', function ($scope, Principal, Auth, Language, $translate) {
         $scope.success = null;
         $scope.error = null;

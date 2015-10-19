@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('samplecassandraApp')
+angular.module('sampleCassandraApp')
     .factory('Auth', function Auth($rootScope, $state, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
         return {
             login: function (credentials, callback) {

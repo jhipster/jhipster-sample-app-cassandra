@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('samplecassandraApp')
+angular.module('sampleCassandraApp')
     .factory('User', function ($resource) {
         return $resource('api/users/:login', {}, {
                 'query': {method: 'GET', isArray: true},

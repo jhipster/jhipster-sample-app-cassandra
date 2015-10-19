@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('samplecassandraApp')
+angular.module('sampleCassandraApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('register', {

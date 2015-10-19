@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('samplecassandraApp')
+angular.module('sampleCassandraApp')
     .controller('HealthModalController', function($scope, $modalInstance, currentHealth, baseName, subSystemName) {
 
         $scope.currentHealth = currentHealth;

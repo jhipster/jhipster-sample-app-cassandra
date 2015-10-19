@@ -1,8 +1,8 @@
 /* globals $ */
 'use strict';
 
-angular.module('samplecassandraApp')
-    .directive('samplecassandraAppPager', function() {
+angular.module('sampleCassandraApp')
+    .directive('sampleCassandraAppPager', function() {
         return {
             templateUrl: 'scripts/components/form/pager.html'
         };

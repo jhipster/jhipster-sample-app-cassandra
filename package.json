@@ -1,5 +1,5 @@
 {
-  "name": "samplecassandra",
+  "name": "sample-cassandra",
   "version": "0.0.0",
   "description": "Description for sampleCassandra",
   "private": true,
