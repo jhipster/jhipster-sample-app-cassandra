@@ -115,8 +115,12 @@ public class UserRepository {
                 "WHERE email = :email");
     }
 
-    public Optional<User> findOne(String id) {
-        return Optional.of(mapper.get(id));
+    public User findOne(String id) {
+        return mapper.get(id);
+    }
+
+    public Optional<User> findOneById(String id) {
+        return Optional.of(findOne(id));
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {
