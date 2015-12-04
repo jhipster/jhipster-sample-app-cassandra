@@ -8,7 +8,7 @@ angular.module('sampleCassandraApp')
             $scope.languages = languages;
         });
 
-        $scope.page = 0;
+        $scope.page = 1;
         $scope.loadAll = function () {
             User.query({}, function (result) {
                 $scope.users = result;
