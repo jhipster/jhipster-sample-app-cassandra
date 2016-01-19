@@ -1,13 +1,16 @@
 'use strict';
 
-angular.module('sampleCassandraApp')
-    .controller('UserManagementController', function ($scope, User, ParseLinks, Language) {
+angular.module('samplecassandraApp')
+    .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, Language) {
         $scope.users = [];
         $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
         });
-
+		
+		Principal.identity().then(function(account) {
+            $scope.currentAccount = account;
+        });
         $scope.page = 1;
         $scope.loadAll = function () {
             User.query({}, function (result) {

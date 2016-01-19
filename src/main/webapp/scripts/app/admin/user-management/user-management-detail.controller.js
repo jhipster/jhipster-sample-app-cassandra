@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleCassandraApp')
+angular.module('samplecassandraApp')
     .controller('UserManagementDetailController', function ($scope, $stateParams, User) {
         $scope.user = {};
         $scope.load = function (login) {

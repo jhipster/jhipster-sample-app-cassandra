@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleCassandraApp')
+angular.module('samplecassandraApp')
     .service('ParseLinks', function () {
         this.parse = function (header) {
             if (header.length == 0) {

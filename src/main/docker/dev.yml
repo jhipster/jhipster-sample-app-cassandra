@@ -1,7 +1,7 @@
 samplecassandra-dev-cassandra:
   container_name: samplecassandra-dev-cassandra
   build: .
-  dockerfile: Cassandra-Dev.Dockerfile
+  dockerfile: cassandra/Cassandra-Dev.Dockerfile
   # volumes:
   #   - ~/volumes/jhipster/sampleCassandra/dev-cassandra/:/var/lib/cassandra/data
   ports:

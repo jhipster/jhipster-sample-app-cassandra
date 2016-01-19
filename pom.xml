@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.mycompany.myapp</groupId>
-    <artifactId>sample-cassandra</artifactId>
+    <artifactId>samplecassandra</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>sampleCassandra</name>
@@ -46,7 +46,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
         <lz4.version>1.3.0</lz4.version>
-        <mapstruct.version>1.0.0.CR1</mapstruct.version>
+        <mapstruct.version>1.0.0.Final</mapstruct.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
@@ -656,7 +656,7 @@
                                 </goals>
                                 <configuration>
                                     <buildTool>grunt</buildTool>
-                                    <buildArgs>build --force --no-color</buildArgs>
+                                    <buildArgs>build --no-color</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>
@@ -685,8 +685,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <!-- this is set to false because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
-                            <executable>false</executable>
+                            <executable>true</executable>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>

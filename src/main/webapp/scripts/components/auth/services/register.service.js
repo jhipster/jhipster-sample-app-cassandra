@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleCassandraApp')
+angular.module('samplecassandraApp')
     .factory('Register', function ($resource) {
         return $resource('api/register', {}, {
         });
