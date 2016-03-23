@@ -11,14 +11,12 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+
 spring:
-    jpa:
-        open-in-view: false
-        hibernate:
-            ddl-auto: none
-            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    application:
+        name: sampleCassandra
     messages:
-        basename: classpath:/i18n/messages
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
@@ -48,14 +46,16 @@ jhipster:
     mail:
         from: sampleCassandra@localhost
     security:
-        rememberme:
+        rememberMe:
             # security key (this key should be unique for your application, and kept secret)
-            key: 9cd465cf5c2009c6d3ba029649816089201b55fb
+            key: 98a1d374db69a13260679097253d50efc2356ec0
     swagger:
         title: sampleCassandra API
         description: sampleCassandra API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:

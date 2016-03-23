@@ -10,9 +10,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+
 spring:
-    profiles:
-        active: prod
     devtools:
         restart:
             enabled: false
@@ -48,7 +47,7 @@ server:
 jhipster:
     http:
         cache: # Used by the CachingHttpHeadersFilter
-            timeToLiveInDays: 31
+            timeToLiveInDays: 1461
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: sampleCassandra@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
@@ -62,3 +61,12 @@ jhipster:
             host: localhost
             port: 2003
             prefix: sampleCassandra
+        logs: # report metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queueSize: 512

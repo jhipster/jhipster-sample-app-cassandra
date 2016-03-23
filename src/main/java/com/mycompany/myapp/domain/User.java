@@ -18,6 +18,8 @@ import java.util.Set;
 @Table(name = "user")
 public class User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @PartitionKey
     private String id;
 
@@ -37,6 +39,7 @@ public class User implements Serializable {
     @Size(max = 50)
     private String lastName;
 
+    @NotNull
     @Email
     @Size(max = 100)
     private String email;

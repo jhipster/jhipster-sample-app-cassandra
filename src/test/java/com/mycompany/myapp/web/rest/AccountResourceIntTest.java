@@ -1,7 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.AbstractCassandraTest;
-import com.mycompany.myapp.Application;
+import com.mycompany.myapp.SampleCassandraApp;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see UserService
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = SampleCassandraApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class AccountResourceIntTest extends AbstractCassandraTest {
@@ -135,7 +134,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
     public void testRegisterValid() throws Exception {
         UserDTO u = new UserDTO(
             "joe",                  // login
@@ -159,7 +157,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
     public void testRegisterInvalidLogin() throws Exception {
         UserDTO u = new UserDTO(
             "funky-log!n",          // login <-- invalid
@@ -183,7 +180,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
     public void testRegisterInvalidEmail() throws Exception {
         UserDTO u = new UserDTO(
             "bob",              // login
@@ -207,7 +203,29 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
+    public void testRegisterEmailEmpty() throws Exception {
+        UserDTO u = new UserDTO(
+            "bob",              // login
+            "password",         // password
+            "Bob",              // firstName
+            "Green",            // lastName
+            "",                 // e-mail <-- empty
+            true,               // activated
+            "en",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
+        );
+
+        restUserMockMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(u)))
+            .andExpect(status().isBadRequest());
+
+        Optional<User> user = userRepository.findOneByLogin("bob");
+        assertThat(user.isPresent()).isFalse();
+    }
+
+    @Test
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
         UserDTO u = new UserDTO(
@@ -244,7 +262,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
     public void testRegisterDuplicateEmail() throws Exception {
         // Good
         UserDTO u = new UserDTO(
@@ -281,7 +298,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
-    @Transactional
     public void testRegisterAdminIsIgnored() throws Exception {
         UserDTO u = new UserDTO(
             "badguy",               // login

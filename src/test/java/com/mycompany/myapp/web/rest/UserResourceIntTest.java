@@ -1,7 +1,8 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.AbstractCassandraTest;
-import com.mycompany.myapp.Application;
+import com.mycompany.myapp.SampleCassandraApp;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.UserService;
 import org.junit.Before;
@@ -18,6 +19,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see UserResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = SampleCassandraApp.class)
 @WebAppConfiguration
 @IntegrationTest
 public class UserResourceIntTest extends AbstractCassandraTest {
@@ -63,4 +66,5 @@ public class UserResourceIntTest extends AbstractCassandraTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
 }
