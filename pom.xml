@@ -72,6 +72,7 @@
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -540,7 +541,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.1</version>
+                <version>0.4.5</version>
                 <configuration>
                     <imageName>samplecassandra</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
@@ -683,9 +684,6 @@
                             <filesets>
                                 <fileset>
                                     <directory>target/www/</directory>
-                                </fileset>
-                                <fileset>
-                                    <directory>node_modules</directory>
                                 </fileset>
                             </filesets>
                         </configuration>

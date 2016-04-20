@@ -11,5 +11,5 @@ services:
             - 8080:8080
     samplecassandra-cassandra:
         extends:
-            file: cassandra.yml
+            file: cassandra-cluster.yml
             service: samplecassandra-cassandra

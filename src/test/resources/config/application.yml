@@ -11,6 +11,8 @@
 # ===================================================================
 
 spring:
+    application:
+        name: sampleCassandra
     data:
         cassandra:
             contactPoints: localhost
@@ -62,3 +64,4 @@ jhipster:
         contactEmail:
         license:
         licenseUrl:
+        enabled: false

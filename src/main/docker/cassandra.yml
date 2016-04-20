@@ -2,9 +2,7 @@ version: '2'
 services:
     samplecassandra-cassandra:
         container_name: samplecassandra-cassandra
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra.Dockerfile
+        image: cassandra:2.2.5
         # volumes:
         #     - ~/volumes/jhipster/sampleCassandra/cassandra/:/var/lib/cassandra/data
         ports:
@@ -14,10 +12,19 @@ services:
             - 9042:9042
             - 9160:9160
     samplecassandra-cassandra-node:
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra.Dockerfile
+        image: cassandra:2.2.5
         links:
             - samplecassandra-cassandra:seed
         environment:
             - CASSANDRA_SEEDS=seed
+    samplecassandra-cassandra-migration:
+        container_name: samplecassandra-cassandra-migration
+        links:
+            - samplecassandra-cassandra
+        environment:
+            - CASSANDRA_CONTACT_POINT=samplecassandra-cassandra
+        build:
+            context: .
+            dockerfile: cassandra/Cassandra.Dockerfile
+        volumes:
+            - ../resources/config/cql:/cql:ro
