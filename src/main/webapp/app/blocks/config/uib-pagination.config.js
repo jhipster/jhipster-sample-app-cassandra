@@ -5,6 +5,8 @@
         .module('sampleCassandraApp')
         .config(paginationConfig);
 
+    paginationConfig.$inject = ['uibPaginationConfig', 'paginationConstants'];
+
     function paginationConfig(uibPaginationConfig, paginationConstants) {
         uibPaginationConfig.itemsPerPage = paginationConstants.itemsPerPage;
         uibPaginationConfig.maxSize = 5;

@@ -37,6 +37,13 @@
 
         function loadAll () {
             User.query({}, function (result) {
+
+                //hide anonymous user from user management: it's a required user for Spring Security
+                for(var i in result) {
+                    if(result[i]['login'] === 'anonymoususer') {
+                        result.splice(i,1);
+                    }
+                }
                 vm.users = result;
             });
         }
