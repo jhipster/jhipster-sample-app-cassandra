@@ -323,7 +323,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             .containsExactly(AuthoritiesConstants.USER);
     }
 
-    @Test    
+    @Test
     public void testSaveInvalidLogin() throws Exception {
         UserDTO invalidUser = new UserDTO(
             "funky-log!n",          // login <-- invalid
@@ -343,5 +343,5 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
 
         Optional<User> user = userRepository.findOneByEmail("funky@example.com");
         assertThat(user.isPresent()).isFalse();
-    }    
+    }
 }
