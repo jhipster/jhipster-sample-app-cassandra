@@ -6,14 +6,12 @@ import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -90,13 +88,7 @@ public class CustomPersistentRememberMeServices extends
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
-        try {
-            
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
-            log.error("Failed to update token: ", e);
-            throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
-        }
+        addCookie(token, request, response);
         return getUserDetailsService().loadUserByUsername(login);
     }
 
@@ -118,12 +110,7 @@ public class CustomPersistentRememberMeServices extends
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
-        try {
-            
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
-            log.error("Failed to save persistent token ", e);
-        }
+        addCookie(token, request, response);
     }
 
     /**
@@ -133,7 +120,6 @@ public class CustomPersistentRememberMeServices extends
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */
     @Override
-    @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {
