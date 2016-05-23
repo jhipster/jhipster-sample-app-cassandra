@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp')
+        .module('jhipsterCassandraSampleApplicationApp')
         .controller('RegisterController', RegisterController);
 
 

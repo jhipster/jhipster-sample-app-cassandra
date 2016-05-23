@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp')
+        .module('jhipsterCassandraSampleApplicationApp')
         .factory('ProfileService', ProfileService);
 
     ProfileService.$inject = ['$q', '$http'];

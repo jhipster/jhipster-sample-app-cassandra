@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp')
+        .module('jhipsterCassandraSampleApplicationApp')
         .factory('PaginationUtil', PaginationUtil);
 
     function PaginationUtil () {

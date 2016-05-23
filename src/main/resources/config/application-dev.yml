@@ -22,16 +22,16 @@ spring:
             contactPoints: localhost
             protocolVersion: V4
             compression: LZ4
-            keyspaceName: sampleCassandra
+            keyspaceName: jhipsterCassandraSampleApplication
     mail:
         host: localhost
+        port: 25
+        username:
+        password:
     messages:
         cache-seconds: 1
     thymeleaf:
         cache: false
-
-liquibase:
-    contexts: dev
 
 server:
     port: 8080
@@ -46,7 +46,7 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: 98a1d374db69a13260679097253d50efc2356ec0
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: sampleCassandra@localhost
+        from: jhipsterCassandraSampleApplication@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -57,7 +57,7 @@ jhipster:
             enabled: false
             host: localhost
             port: 2003
-            prefix: sampleCassandra
+            prefix: jhipsterCassandraSampleApplication
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds

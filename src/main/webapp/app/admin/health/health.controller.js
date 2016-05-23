@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp')
+        .module('jhipsterCassandraSampleApplicationApp')
         .controller('JhiHealthCheckController', JhiHealthCheckController);
 
     JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];

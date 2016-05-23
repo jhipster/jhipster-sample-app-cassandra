@@ -1,1 +1,1 @@
-DROP KEYSPACE IF EXISTS sampleCassandra;
+DROP KEYSPACE IF EXISTS jhipsterCassandraSampleApplication;

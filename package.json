@@ -1,7 +1,7 @@
 {
-  "name": "sample-cassandra",
+  "name": "jhipster-cassandra-sample-application",
   "version": "0.0.0",
-  "description": "Description for sampleCassandra",
+  "description": "Description for jhipsterCassandraSampleApplication",
   "private": true,
   "cacheDirectories": [
     "node_modules",

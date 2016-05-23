@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('sampleCassandraApp')
+    angular.module('jhipsterCassandraSampleApplicationApp')
         .controller('HealthModalController', HealthModalController);
 
     HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];

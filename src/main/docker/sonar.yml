@@ -1,8 +1,8 @@
 version: '2'
 services:
-    samplecassandra-sonar:
-        container_name: samplecassandra-sonar
-        image: sonarqube:5.3
+    jhipstercassandrasampleapplication-sonar:
+        container_name: jhipstercassandrasampleapplication-sonar
+        image: sonarqube:5.5-alpine
         ports:
             - 9000:9000
             - 9092:9092

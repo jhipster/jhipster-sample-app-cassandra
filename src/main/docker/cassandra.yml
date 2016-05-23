@@ -1,32 +1,21 @@
 version: '2'
 services:
-    samplecassandra-cassandra:
-        container_name: samplecassandra-cassandra
+    jhipstercassandrasampleapplication-cassandra:
+        container_name: jhipstercassandrasampleapplication-cassandra
         image: cassandra:2.2.5
         # volumes:
-        #     - ~/volumes/jhipster/sampleCassandra/cassandra/:/var/lib/cassandra/data
+        #     - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
         ports:
             - 7000:7000
             - 7001:7001
             - 7199:7199
             - 9042:9042
             - 9160:9160
-    samplecassandra-cassandra-node:
-        image: cassandra:2.2.5
+    jhipstercassandrasampleapplication-cassandra-migration:
+        extends:
+            file: cassandra-migration.yml
+            service: jhipstercassandrasampleapplication-cassandra-migration
         links:
-            - samplecassandra-cassandra:seed
+            - jhipstercassandrasampleapplication-cassandra
         environment:
-            - CASSANDRA_SEEDS=seed
-    samplecassandra-cassandra-migration:
-        container_name: samplecassandra-cassandra-migration
-        links:
-            - samplecassandra-cassandra
-        environment:
-            - CASSANDRA_CONTACT_POINT=samplecassandra-cassandra
-            - USER=docker-cassandra-migration
-            # - DEBUG_LOG=1 ## uncomment to show debug logs in the migration
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra.Dockerfile
-        volumes:
-            - ../resources/config/cql:/cql:ro
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql

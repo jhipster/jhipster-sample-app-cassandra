@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp')
+        .module('jhipsterCassandraSampleApplicationApp')
         .factory('notificationInterceptor', notificationInterceptor);
 
     notificationInterceptor.$inject = ['$q', 'AlertService'];
@@ -15,9 +15,9 @@
         return service;
 
         function response (response) {
-            var alertKey = response.headers('X-sampleCassandraApp-alert');
+            var alertKey = response.headers('X-jhipsterCassandraSampleApplicationApp-alert');
             if (angular.isString(alertKey)) {
-                AlertService.success(alertKey, { param : response.headers('X-sampleCassandraApp-params')});
+                AlertService.success(alertKey, { param : response.headers('X-jhipsterCassandraSampleApplicationApp-params')});
             }
             return response;
         }

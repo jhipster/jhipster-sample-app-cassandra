@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleCassandraApp', [
+        .module('jhipsterCassandraSampleApplicationApp', [
             'ngStorage', 
             'tmh.dynamicLocale',
             'pascalprecht.translate', 

@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "name": "sample-cassandra",
+  "name": "jhipster-cassandra-sample-application",
   "appPath": "src/main/webapp/",
   "testPath": "src/test/javascript/spec",
   "dependencies": {

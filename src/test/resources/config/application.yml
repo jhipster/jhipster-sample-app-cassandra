@@ -12,7 +12,7 @@
 
 spring:
     application:
-        name: sampleCassandra
+        name: jhipsterCassandraSampleApplication
     data:
         cassandra:
             contactPoints: localhost
@@ -55,8 +55,8 @@ jhipster:
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:
-        title: sampleCassandra API
-        description: sampleCassandra API documentation
+        title: jhipsterCassandraSampleApplication API
+        description: jhipsterCassandraSampleApplication API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:
