@@ -5,53 +5,27 @@
         .module('jhipsterCassandraSampleApplicationApp')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'paginationConstants', 'JhiLanguageService'];
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'JhiLanguageService'];
 
-    function UserManagementController(Principal, User, ParseLinks, paginationConstants, JhiLanguageService) {
+    function UserManagementController(Principal, User, ParseLinks, JhiLanguageService) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        vm.clear = clear;
         vm.currentAccount = null;
         vm.languages = null;
-        vm.links = null;
         vm.loadAll = loadAll;
-        vm.loadPage = loadPage;
-        vm.page = 1;
         vm.setActive = setActive;
-        vm.totalItems = null;
         vm.users = [];
-
+        
 
         vm.loadAll();
-
         
         JhiLanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });
-
         Principal.identity().then(function(account) {
             vm.currentAccount = account;
         });
-
-
-        function loadAll () {
-            User.query({}, function (result) {
-
-                //hide anonymous user from user management: it's a required user for Spring Security
-                for(var i in result) {
-                    if(result[i]['login'] === 'anonymoususer') {
-                        result.splice(i,1);
-                    }
-                }
-                vm.users = result;
-            });
-        }
-
-        function loadPage (page) {
-            vm.page = page;
-            vm.loadAll();
-        }
 
         function setActive (user, isActivated) {
             user.activated = isActivated;
@@ -61,15 +35,22 @@
             });
         }
 
-        function clear () {
-            vm.user = {
-                id: null, login: null, firstName: null, lastName: null, email: null,
-                activated: null, langKey: null, createdBy: null, createdDate: null,
-                lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-                resetKey: null, authorities: null
-            };
-            vm.editForm.$setPristine();
-            vm.editForm.$setUntouched();
+        function loadAll () {
+            User.query(onSuccess, onError);
         }
+        function onSuccess (data, headers) {
+            //hide anonymous user from user management: it's a required user for Spring Security
+            for (var i in data) {
+                if (data[i]['login'] === 'anonymoususer') {
+                    data.splice(i, 1);
+                }
+            }
+            
+            vm.users = data;
+        }
+        function onError (error) {
+            AlertService.error(error.data.message);
+        }
+        
     }
 })();
