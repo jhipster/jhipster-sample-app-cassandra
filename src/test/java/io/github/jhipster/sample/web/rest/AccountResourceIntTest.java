@@ -144,7 +144,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Shmoe",                // lastName
             "joe@example.com",      // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         restMvc.perform(
@@ -167,7 +167,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "One",                  // lastName
             "funky@example.com",    // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -183,7 +183,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     @Test
     public void testRegisterInvalidEmail() throws Exception {
         ManagedUserDTO invalidUser = new ManagedUserDTO(
-            null,                   // id
+            null,               // id
             "bob",              // login
             "password",         // password
             "Bob",              // firstName
@@ -206,7 +206,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     @Test
     public void testRegisterInvalidPassword() throws Exception {
         ManagedUserDTO invalidUser = new ManagedUserDTO(
-            null,                   // id
+            null,               // id
             "bob",              // login
             "123",              // password with only 3 digits
             "Bob",              // firstName
@@ -237,7 +237,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Something",            // lastName
             "alice@example.com",    // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         // Duplicate login, different e-mail
@@ -273,7 +273,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Doe",                  // lastName
             "john@example.com",     // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         // Duplicate e-mail, different login
@@ -308,7 +308,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)));
 
         restMvc.perform(
@@ -331,7 +331,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "One",                  // lastName
             "funky@example.com",    // e-mail
             true,                   // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 

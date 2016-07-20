@@ -5,9 +5,9 @@
         .module('jhipsterCassandraSampleApplicationApp')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'JhiLanguageService'];
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'AlertService', 'JhiLanguageService'];
 
-    function UserManagementController(Principal, User, ParseLinks, JhiLanguageService) {
+    function UserManagementController(Principal, User, ParseLinks, AlertService, JhiLanguageService) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -38,7 +38,8 @@
         function loadAll () {
             User.query(onSuccess, onError);
         }
-        function onSuccess (data, headers) {
+
+        function onSuccess(data, headers) {
             //hide anonymous user from user management: it's a required user for Spring Security
             for (var i in data) {
                 if (data[i]['login'] === 'anonymoususer') {
@@ -48,9 +49,10 @@
             
             vm.users = data;
         }
-        function onError (error) {
+
+        function onError(error) {
             AlertService.error(error.data.message);
         }
-        
+
     }
 })();

@@ -13,6 +13,8 @@
 spring:
     application:
         name: jhipsterCassandraSampleApplication
+    jackson:
+        serialization.write_dates_as_timestamps: false
     data:
         cassandra:
             contactPoints: localhost
@@ -64,4 +66,3 @@ jhipster:
         contactEmail:
         license:
         licenseUrl:
-        enabled: false

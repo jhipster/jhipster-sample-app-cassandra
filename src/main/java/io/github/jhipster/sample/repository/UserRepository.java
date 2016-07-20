@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.ArrayList;
