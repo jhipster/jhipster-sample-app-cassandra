@@ -5,7 +5,7 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
 import io.github.jhipster.sample.service.util.RandomUtil;
-import io.github.jhipster.sample.web.rest.dto.ManagedUserDTO;
+import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,7 +26,6 @@ public class UserService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
-
 
     @Inject
     private UserRepository userRepository;
@@ -73,7 +72,7 @@ public class UserService {
             });
     }
 
-    public User createUserInformation(String login, String password, String firstName, String lastName, String email,
+    public User createUser(String login, String password, String firstName, String lastName, String email,
         String langKey) {
 
         User newUser = new User();
@@ -98,19 +97,19 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(ManagedUserDTO managedUserDTO) {
+    public User createUser(ManagedUserVM managedUserVM) {
         User user = new User();
         user.setId(UUID.randomUUID().toString());
-        user.setLogin(managedUserDTO.getLogin());
-        user.setFirstName(managedUserDTO.getFirstName());
-        user.setLastName(managedUserDTO.getLastName());
-        user.setEmail(managedUserDTO.getEmail());
-        if (managedUserDTO.getLangKey() == null) {
+        user.setLogin(managedUserVM.getLogin());
+        user.setFirstName(managedUserVM.getFirstName());
+        user.setLastName(managedUserVM.getLastName());
+        user.setEmail(managedUserVM.getEmail());
+        if (managedUserVM.getLangKey() == null) {
             user.setLangKey("en"); // default language
         } else {
-            user.setLangKey(managedUserDTO.getLangKey());
+            user.setLangKey(managedUserVM.getLangKey());
         }
-        user.setAuthorities(managedUserDTO.getAuthorities());
+        user.setAuthorities(managedUserVM.getAuthorities());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -121,7 +120,7 @@ public class UserService {
         return user;
     }
 
-    public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
@@ -132,7 +131,25 @@ public class UserService {
         });
     }
 
-    public void deleteUserInformation(String login) {
+    public void updateUser(String id, String login, String firstName, String lastName, String email,
+        boolean activated, String langKey, Set<String> authorities) {
+
+        userRepository
+            .findOneById(id)
+            .ifPresent(u -> {
+                u.setLogin(login);
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setEmail(email);
+                u.setActivated(activated);
+                u.setLangKey(langKey);
+                u.setAuthorities(authorities);
+                userRepository.save(u);
+                log.debug("Changed Information for User: {}", u);
+            });
+    }
+
+    public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(u -> {
             userRepository.delete(u);
             log.debug("Deleted User: {}", u);
@@ -149,16 +166,17 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneByLogin(login).map(u -> {
-            u.getAuthorities().size();
-            return u;
-        });
+        return userRepository.findOneByLogin(login);
     }
 
+    public User getUserWithAuthorities(String id) {
+        User user = userRepository.findOne(id);
+        return user;
+    }
 
     public User getUserWithAuthorities() {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
-        user.getAuthorities().size(); // eagerly load the association
         return user;
     }
+
 }

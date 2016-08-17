@@ -14,7 +14,7 @@
             url: '/user-management',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'user-management.home.title'
+                pageTitle: 'userManagement.home.title'
             },
             views: {
                 'content@': {
@@ -22,7 +22,7 @@
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 }
-            },        
+            },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('user-management');

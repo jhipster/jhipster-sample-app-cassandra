@@ -5,7 +5,7 @@ services:
         external_links:
             - jhipstercassandrasampleapplication-cassandra:cassandra
         environment:
-            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
             - JHIPSTER_SLEEP=30 # gives time for the cassandra cluster to start and execute the migration scripts
         ports:
