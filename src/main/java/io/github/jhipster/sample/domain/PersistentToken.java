@@ -1,18 +1,15 @@
 package io.github.jhipster.sample.domain;
 
 import com.datastax.driver.mapping.annotations.*;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
@@ -24,8 +21,6 @@ public class PersistentToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("d MMMM yyyy");
-
     private static final int MAX_USER_AGENT_LEN = 255;
 
     @PartitionKey
@@ -35,8 +30,7 @@ public class PersistentToken implements Serializable {
     @NotNull
     @Column(name = "token_value")
     private String tokenValue;
-
-    @JsonIgnore
+    
     @Column(name = "token_date")
     private Date tokenDate;
 
@@ -75,11 +69,6 @@ public class PersistentToken implements Serializable {
 
     public void setTokenDate(Date tokenDate) {
         this.tokenDate = tokenDate;
-    }
-
-    @JsonGetter
-    public String getFormattedTokenDate() {
-        return DATE_TIME_FORMATTER.format(this.tokenDate);
     }
 
     public String getIpAddress() {

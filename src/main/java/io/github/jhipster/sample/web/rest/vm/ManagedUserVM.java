@@ -32,7 +32,7 @@ public class ManagedUserVM extends UserDTO {
     }
 
     public ManagedUserVM(String id, String login, String password, String firstName, String lastName,
-                          String email, boolean activated, String langKey, Set<String> authorities ) {
+                         String email, boolean activated, String langKey, Set<String> authorities) {
         super(login, firstName, lastName, email, activated, langKey, authorities);
         this.id = id;
         this.password = password;
