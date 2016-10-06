@@ -18,7 +18,6 @@ public class ManagedUserVM extends UserDTO {
 
     private String id;
 
-    @NotNull
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
