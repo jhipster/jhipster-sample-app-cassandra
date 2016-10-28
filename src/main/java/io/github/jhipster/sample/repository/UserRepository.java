@@ -118,10 +118,6 @@ public class UserRepository {
         return mapper.get(id);
     }
 
-    public Optional<User> findOneById(String id) {
-        return Optional.of(findOne(id));
-    }
-
     public Optional<User> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);
