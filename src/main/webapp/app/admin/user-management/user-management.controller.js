@@ -19,7 +19,6 @@
         
 
         vm.loadAll();
-        
         JhiLanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });
