@@ -1,5 +1,6 @@
 package io.github.jhipster.sample.security;
 
+import com.datastax.driver.core.exceptions.DriverException;
 import io.github.jhipster.sample.domain.PersistentToken;
 import io.github.jhipster.sample.repository.PersistentTokenRepository;
 import io.github.jhipster.sample.repository.UserRepository;
@@ -88,7 +89,13 @@ public class CustomPersistentRememberMeServices extends
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
-        addCookie(token, request, response);
+        try {
+            persistentTokenRepository.save(token);
+            addCookie(token, request, response);
+        } catch (DriverException e) {
+            log.error("Failed to update token: ", e);
+            throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
+        }
         return getUserDetailsService().loadUserByUsername(login);
     }
 
@@ -110,7 +117,12 @@ public class CustomPersistentRememberMeServices extends
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
-        addCookie(token, request, response);
+        try {
+            persistentTokenRepository.save(token);
+            addCookie(token, request, response);
+        } catch (DriverException e) {
+            log.error("Failed to save persistent token ", e);
+        }
     }
 
     /**
@@ -130,7 +142,7 @@ public class CustomPersistentRememberMeServices extends
             } catch (InvalidCookieException ice) {
                 log.info("Invalid cookie, no persistent token could be deleted", ice);
             } catch (RememberMeAuthenticationException rmae) {
-                log.debug("No persistent token found, so no token could be deleted", rmae);
+                log.debug("No persistent token found, so no token could be deleted");
             }
         }
         super.logout(request, response, authentication);

@@ -7,7 +7,7 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
-            - JHIPSTER_SLEEP=30 # gives time for the cassandra cluster to start and execute the migration scripts
+            - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
         ports:
             - 8080:8080
     jhipstercassandrasampleapplication-cassandra:
@@ -15,7 +15,7 @@ services:
             file: cassandra-cluster.yml
             service: jhipstercassandrasampleapplication-cassandra
     jhipstercassandrasampleapplication-cassandra-node:
-        image: cassandra:2.2.7
+        image: cassandra:3.9
         links:
             - jhipstercassandrasampleapplication-cassandra:seed
         environment:

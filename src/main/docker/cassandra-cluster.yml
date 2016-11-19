@@ -2,7 +2,7 @@ version: '2'
 services:
     jhipstercassandrasampleapplication-cassandra:
         container_name: jhipstercassandrasampleapplication-cassandra
-        image: cassandra:2.2.7
+        image: cassandra:3.9
         # volumes:
         #     - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
         ports:
@@ -12,7 +12,7 @@ services:
             - 9042:9042
             - 9160:9160
     jhipstercassandrasampleapplication-cassandra-node:
-        image: cassandra:2.2.7
+        image: cassandra:3.9
         links:
             - jhipstercassandrasampleapplication-cassandra:seed
         environment:
