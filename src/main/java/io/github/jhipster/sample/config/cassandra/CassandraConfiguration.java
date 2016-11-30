@@ -9,24 +9,25 @@ import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.StringUtils;
 
 import com.codahale.metrics.MetricRegistry;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.ProtocolVersion;
 import com.datastax.driver.core.QueryOptions;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SocketOptions;
-import com.datastax.driver.core.TupleType;
 import com.datastax.driver.core.policies.LoadBalancingPolicy;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
 import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
-import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec;
+
+import io.github.jhipster.sample.config.Constants;
 
 @Configuration
 @EnableConfigurationProperties(CassandraProperties.class)
+@Profile({Constants.SPRING_PROFILE_DEVELOPMENT, Constants.SPRING_PROFILE_PRODUCTION})
 public class CassandraConfiguration {
 
     @Value("${spring.data.cassandra.protocolVersion:V4}")
@@ -42,7 +43,7 @@ public class CassandraConfiguration {
         Cluster.Builder builder = Cluster.builder()
                 .withClusterName(properties.getClusterName())
                 .withProtocolVersion(protocolVersion)
-                .withPort(properties.getPort());
+                .withPort(getPort(properties));
 
         if (properties.getUsername() != null) {
             builder.withCredentials(properties.getUsername(), properties.getPassword());
@@ -82,6 +83,10 @@ public class CassandraConfiguration {
         }
 
         return cluster;
+    }
+
+    protected int getPort(CassandraProperties properties) {
+        return properties.getPort();
     }
 
     public static <T> T instantiate(Class<T> type) {
