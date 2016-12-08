@@ -8,7 +8,6 @@ import io.github.jhipster.sample.service.util.RandomUtil;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
