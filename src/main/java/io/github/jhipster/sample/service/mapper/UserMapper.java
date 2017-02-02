@@ -18,7 +18,6 @@ public interface UserMapper {
 
     List<UserDTO> usersToUserDTOs(List<User> users);
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "activationKey", ignore = true)
     @Mapping(target = "resetKey", ignore = true)
     @Mapping(target = "resetDate", ignore = true)
@@ -35,5 +34,4 @@ public interface UserMapper {
         user.setId(id);
         return user;
     }
-
 }

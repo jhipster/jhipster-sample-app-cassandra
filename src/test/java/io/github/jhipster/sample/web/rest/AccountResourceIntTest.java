@@ -3,6 +3,7 @@ package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
 import io.github.jhipster.sample.domain.User;
+import io.github.jhipster.sample.repository.PersistentTokenRepository;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.MailService;
@@ -14,14 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.inject.Inject;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,11 +41,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
 public class AccountResourceIntTest extends AbstractCassandraTest {
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
 
     @Mock
     private UserService mockUserService;
@@ -62,15 +65,11 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail((User) anyObject());
 
-        AccountResource accountResource = new AccountResource();
-        ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
-        ReflectionTestUtils.setField(accountResource, "userService", userService);
-        ReflectionTestUtils.setField(accountResource, "mailService", mockMailService);
+        AccountResource accountResource =
+            new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository);
 
-        AccountResource accountUserMockResource = new AccountResource();
-        ReflectionTestUtils.setField(accountUserMockResource, "userRepository", userRepository);
-        ReflectionTestUtils.setField(accountUserMockResource, "userService", mockUserService);
-        ReflectionTestUtils.setField(accountUserMockResource, "mailService", mockMailService);
+        AccountResource accountUserMockResource =
+            new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository);
 
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).build();
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).build();
@@ -105,7 +104,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
         user.setLogin("test");
         user.setFirstName("john");
         user.setLastName("doe");
-        user.setEmail("john.doe@jhipter.com");
+        user.setEmail("john.doe@jhipster.com");
         user.setAuthorities(authorities);
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
 
@@ -116,7 +115,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .andExpect(jsonPath("$.login").value("test"))
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
-                .andExpect(jsonPath("$.email").value("john.doe@jhipter.com"))
+                .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
                 .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
@@ -185,7 +184,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Green",            // lastName
             "invalid",          // e-mail <-- invalid
             true,               // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -208,7 +207,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Green",            // lastName
             "bob@example.com",  // e-mail
             true,               // activated
-            "en",               // langKey
+            "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -321,6 +320,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     @Test
     public void testSaveInvalidLogin() throws Exception {
         UserDTO invalidUser = new UserDTO(
+            null,                   // id
             "funky-log!n",          // login <-- invalid
             "Funky",                // firstName
             "One",                  // lastName

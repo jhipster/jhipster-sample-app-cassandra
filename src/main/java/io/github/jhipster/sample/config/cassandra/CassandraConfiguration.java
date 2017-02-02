@@ -1,5 +1,7 @@
 package io.github.jhipster.sample.config.cassandra;
 
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -23,11 +25,9 @@ import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
 import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
 
-import io.github.jhipster.sample.config.Constants;
-
 @Configuration
 @EnableConfigurationProperties(CassandraProperties.class)
-@Profile({Constants.SPRING_PROFILE_DEVELOPMENT, Constants.SPRING_PROFILE_PRODUCTION})
+@Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
 public class CassandraConfiguration {
 
     @Value("${spring.data.cassandra.protocolVersion:V4}")

@@ -5,15 +5,16 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
 import io.github.jhipster.sample.service.util.RandomUtil;
-import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
+import io.github.jhipster.sample.service.dto.UserDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -23,12 +24,14 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    @Inject
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    @Inject
-    private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -71,8 +74,7 @@ public class UserService {
             });
     }
 
-    public User createUser(String login, String password, String firstName, String lastName, String email,
-        String langKey) {
+    public User createUser(String login, String password, String firstName, String lastName, String email, String langKey) {
 
         User newUser = new User();
         newUser.setId(UUID.randomUUID().toString());
@@ -96,19 +98,19 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(ManagedUserVM managedUserVM) {
+    public User createUser(UserDTO userDTO) {
         User user = new User();
         user.setId(UUID.randomUUID().toString());
-        user.setLogin(managedUserVM.getLogin());
-        user.setFirstName(managedUserVM.getFirstName());
-        user.setLastName(managedUserVM.getLastName());
-        user.setEmail(managedUserVM.getEmail());
-        if (managedUserVM.getLangKey() == null) {
+        user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        if (userDTO.getLangKey() == null) {
             user.setLangKey("en"); // default language
         } else {
-            user.setLangKey(managedUserVM.getLangKey());
+            user.setLangKey(userDTO.getLangKey());
         }
-        user.setAuthorities(managedUserVM.getAuthorities());
+        user.setAuthorities(userDTO.getAuthorities());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -119,6 +121,9 @@ public class UserService {
         return user;
     }
 
+    /**
+     * Update basic information (first name, last name, email, language) for the current user.
+     */
     public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             user.setFirstName(firstName);
@@ -130,22 +135,25 @@ public class UserService {
         });
     }
 
-    public void updateUser(String id, String login, String firstName, String lastName, String email,
-        boolean activated, String langKey, Set<String> authorities) {
-
-        Optional.of(userRepository
-            .findOne(id))
-            .ifPresent(user -> {
-                user.setLogin(login);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setEmail(email);
-                user.setActivated(activated);
-                user.setLangKey(langKey);
-                user.setAuthorities(authorities);
+    /**
+     * Update all information for a specific user, and return the modified user.
+     */
+    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+        return Optional.of(userRepository
+            .findOne(userDTO.getId()))
+            .map(user -> {
+                user.setLogin(userDTO.getLogin());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                user.setEmail(userDTO.getEmail());
+                user.setActivated(userDTO.isActivated());
+                user.setLangKey(userDTO.getLangKey());
+                user.setAuthorities(userDTO.getAuthorities());
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
-            });
+                return user;
+            })
+            .map(UserDTO::new);
     }
 
     public void deleteUser(String login) {
@@ -164,22 +172,23 @@ public class UserService {
         });
     }
 
+    
+    public List<UserDTO> getAllManagedUsers() {
+        return userRepository.findAll().stream()
+            .map(UserDTO::new)
+            .collect(Collectors.toList());
+    }
+
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login);
     }
 
     public User getUserWithAuthorities(String id) {
-        User user = userRepository.findOne(id);
-        return user;
+        return userRepository.findOne(id);
     }
 
     public User getUserWithAuthorities() {
-        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User user = null;
-        if (optionalUser.isPresent()) {
-          user = optionalUser.get();
-         }
-         return user;
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
     }
 
 }

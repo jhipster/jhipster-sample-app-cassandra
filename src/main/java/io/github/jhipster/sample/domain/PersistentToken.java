@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see io.github.jhipster.sample.security.CustomPersistentRememberMeServices
+ * @see io.github.jhipster.sample.security.PersistentTokenRememberMeServices
  */
 @Table(name = "persistent_token")
 public class PersistentToken implements Serializable {

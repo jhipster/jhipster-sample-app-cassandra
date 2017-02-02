@@ -12,8 +12,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +22,7 @@ import java.util.Optional;
 @Repository
 public class UserRepository {
 
-    @Inject
-    private Session session;
+    private final Session session;
 
     private Mapper<User> mapper;
 
@@ -55,8 +52,8 @@ public class UserRepository {
 
     private PreparedStatement deleteByEmailStmt;
 
-    @PostConstruct
-    public void init() {
+    public UserRepository(Session session) {
+        this.session = session;
         mapper = new MappingManager(session).mapper(User.class);
 
         findAllStmt = session.prepare("SELECT * FROM user");

@@ -7,8 +7,6 @@ import io.github.jhipster.sample.domain.PersistentToken;
 import io.github.jhipster.sample.domain.User;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +16,7 @@ import java.util.List;
 @Repository
 public class PersistentTokenRepository {
 
-    @Inject
-    private Session session;
+    private final Session session;
 
     Mapper<PersistentToken> mapper;
 
@@ -31,8 +28,8 @@ public class PersistentTokenRepository {
 
     private PreparedStatement deletePersistentTokenSeriesByUserIdStmt;
 
-    @PostConstruct
-    public void init() {
+    public PersistentTokenRepository(Session session) {
+        this.session = session;
         mapper = new MappingManager(session).mapper(PersistentToken.class);
 
         findPersistentTokenSeriesByUserIdStmt = session.prepare(

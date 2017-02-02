@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
+    private String id;
+
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;
@@ -37,17 +39,19 @@ public class UserDTO {
     private Set<String> authorities;
 
     public UserDTO() {
+        // Empty constructor needed for MapStruct.
     }
 
     public UserDTO(User user) {
-        this(user.getLogin(), user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getActivated(), user.getLangKey(),
+        this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
+            user.getEmail(), user.getActivated(),user.getLangKey(),
             user.getAuthorities());
     }
 
-    public UserDTO(String login, String firstName, String lastName,
-        String email, boolean activated, String langKey, Set<String> authorities) {
+    public UserDTO(String id, String login, String firstName, String lastName,
+        String email, boolean activated,String langKey,Set<String> authorities) {
 
+        this.id = id;
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,8 +61,20 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getFirstName() {

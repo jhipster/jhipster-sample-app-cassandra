@@ -1,11 +1,9 @@
 package io.github.jhipster.sample.web.rest.vm;
 
-
-import java.util.Set;
-
-import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import javax.validation.constraints.Size;
+
+import java.util.Set;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
@@ -13,35 +11,24 @@ import javax.validation.constraints.Size;
 public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
-    public static final int PASSWORD_MAX_LENGTH = 100;
 
-    private String id;
+    public static final int PASSWORD_MAX_LENGTH = 100;
 
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
     public ManagedUserVM() {
-    }
-
-    public ManagedUserVM(User user) {
-        super(user);
-        this.id = user.getId();
-        this.password = null;
+        // Empty constructor needed for Jackson.
     }
 
     public ManagedUserVM(String id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated, String langKey, Set<String> authorities) {
-        super(login, firstName, lastName, email, activated, langKey, authorities);
-        this.id = id;
+                         String email, boolean activated, String langKey,
+                         Set<String> authorities) {
+
+        super(id, login, firstName, lastName, email, activated, langKey,
+            authorities);
+
         this.password = password;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getPassword() {
@@ -51,7 +38,6 @@ public class ManagedUserVM extends UserDTO {
     @Override
     public String toString() {
         return "ManagedUserVM{" +
-            "id=" + id +
             "} " + super.toString();
     }
 }
