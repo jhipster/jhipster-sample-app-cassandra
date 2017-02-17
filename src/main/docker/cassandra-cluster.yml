@@ -1,7 +1,6 @@
 version: '2'
 services:
     jhipstercassandrasampleapplication-cassandra:
-        container_name: jhipstercassandrasampleapplication-cassandra
         image: cassandra:3.9
         # volumes:
         #     - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
@@ -13,15 +12,11 @@ services:
             - 9160:9160
     jhipstercassandrasampleapplication-cassandra-node:
         image: cassandra:3.9
-        links:
-            - jhipstercassandrasampleapplication-cassandra:seed
         environment:
-            - CASSANDRA_SEEDS=seed
+            - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
     jhipstercassandrasampleapplication-cassandra-migration:
         extends:
             file: cassandra-migration.yml
             service: jhipstercassandrasampleapplication-cassandra-migration
-        links:
-            - jhipstercassandrasampleapplication-cassandra
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
