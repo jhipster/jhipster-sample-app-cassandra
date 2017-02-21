@@ -1,6 +1,7 @@
 package io.github.jhipster.sample.service;
 
 import io.github.jhipster.sample.domain.User;
+import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
@@ -175,6 +176,7 @@ public class UserService {
     
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAll().stream()
+            .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))
             .map(UserDTO::new)
             .collect(Collectors.toList());
     }
