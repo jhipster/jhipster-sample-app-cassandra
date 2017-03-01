@@ -28,6 +28,8 @@ spring:
             keyspaceName: cassandra_unit_keyspace
     mail:
         host: localhost
+    messages:
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
