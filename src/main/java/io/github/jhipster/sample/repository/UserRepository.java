@@ -4,15 +4,9 @@ import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import io.github.jhipster.sample.domain.User;
-
-import java.time.ZonedDateTime;
-
-import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +46,14 @@ public class UserRepository {
 
     private PreparedStatement deleteByEmailStmt;
 
+    private PreparedStatement truncateStmt;
+
+    private PreparedStatement truncateByResetKeyStmt;
+
+    private PreparedStatement truncateByLoginStmt;
+
+    private PreparedStatement truncateByEmailStmt;
+
     public UserRepository(Session session) {
         this.session = session;
         mapper = new MappingManager(session).mapper(User.class);
@@ -60,34 +62,34 @@ public class UserRepository {
 
         findOneByActivationKeyStmt = session.prepare(
             "SELECT id " +
-            "FROM user_by_activation_key " +
-            "WHERE activation_key = :activation_key");
+                "FROM user_by_activation_key " +
+                "WHERE activation_key = :activation_key");
 
         findOneByResetKeyStmt = session.prepare(
             "SELECT id " +
-            "FROM user_by_reset_key " +
-            "WHERE reset_key = :reset_key");
+                "FROM user_by_reset_key " +
+                "WHERE reset_key = :reset_key");
 
         insertByActivationKeyStmt = session.prepare(
             "INSERT INTO user_by_activation_key (activation_key, id) " +
-            "VALUES (:activation_key, :id)");
+                "VALUES (:activation_key, :id)");
 
         insertByResetKeyStmt = session.prepare(
             "INSERT INTO user_by_reset_key (reset_key, id) " +
-            "VALUES (:reset_key, :id)");
+                "VALUES (:reset_key, :id)");
 
         deleteByActivationKeyStmt = session.prepare(
             "DELETE FROM user_by_activation_key " +
-            "WHERE activation_key = :activation_key");
+                "WHERE activation_key = :activation_key");
 
         deleteByResetKeyStmt = session.prepare(
             "DELETE FROM user_by_reset_key " +
-            "WHERE reset_key = :reset_key");
+                "WHERE reset_key = :reset_key");
 
         findOneByLoginStmt = session.prepare(
             "SELECT id " +
-            "FROM user_by_login " +
-            "WHERE login = :login");
+                "FROM user_by_login " +
+                "WHERE login = :login");
 
         insertByLoginStmt = session.prepare(
             "INSERT INTO user_by_login (login, id) " +
@@ -99,8 +101,8 @@ public class UserRepository {
 
         findOneByEmailStmt = session.prepare(
             "SELECT id " +
-            "FROM user_by_email " +
-            "WHERE email     = :email");
+                "FROM user_by_email " +
+                "WHERE email     = :email");
 
         insertByEmailStmt = session.prepare(
             "INSERT INTO user_by_email (email, id) " +
@@ -109,6 +111,14 @@ public class UserRepository {
         deleteByEmailStmt = session.prepare(
             "DELETE FROM user_by_email " +
                 "WHERE email = :email");
+
+        truncateStmt = session.prepare("TRUNCATE user");
+
+        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key");
+
+        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login");
+
+        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
     }
 
     public User findOne(String id) {
@@ -167,9 +177,9 @@ public class UserRepository {
                 .setString("id", user.getId()));
         }
         if (!StringUtils.isEmpty(user.getResetKey())) {
-          batch.add(insertByResetKeyStmt.bind()
-              .setString("reset_key", user.getResetKey())
-              .setString("id", user.getId()));
+            batch.add(insertByResetKeyStmt.bind()
+                .setString("reset_key", user.getResetKey())
+                .setString("id", user.getId()));
         }
         batch.add(insertByLoginStmt.bind()
             .setString("login", user.getLogin())
@@ -203,5 +213,19 @@ public class UserRepository {
         return Optional.ofNullable(rs.one().getString("id"))
             .map(id -> Optional.ofNullable(mapper.get(id)))
             .get();
+    }
+
+    public void deleteAll() {
+        BoundStatement truncate = truncateStmt.bind();
+        session.execute(truncate);
+
+        BoundStatement truncateByEmail = truncateByEmailStmt.bind();
+        session.execute(truncateByEmail);
+
+        BoundStatement truncateByLogin = truncateByLoginStmt.bind();
+        session.execute(truncateByLogin);
+
+        BoundStatement truncateByResetKey = truncateByResetKeyStmt.bind();
+        session.execute(truncateByResetKey);
     }
 }
