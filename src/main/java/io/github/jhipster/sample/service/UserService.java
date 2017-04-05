@@ -181,7 +181,7 @@ public class UserService {
         });
     }
 
-    
+
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAll().stream()
             .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))

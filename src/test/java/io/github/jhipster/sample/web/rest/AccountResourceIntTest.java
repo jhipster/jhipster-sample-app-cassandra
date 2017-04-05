@@ -138,7 +138,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
-            "joe@example.com",      // e-mail
+            "joe@example.com",      // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
@@ -161,7 +161,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
-            "funky@example.com",    // e-mail
+            "funky@example.com",    // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
@@ -184,7 +184,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",         // password
             "Bob",              // firstName
             "Green",            // lastName
-            "invalid",          // e-mail <-- invalid
+            "invalid",          // email <-- invalid
             true,               // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
@@ -207,7 +207,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "123",              // password with only 3 digits
             "Bob",              // firstName
             "Green",            // lastName
-            "bob@example.com",  // e-mail
+            "bob@example.com",  // email
             true,               // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
@@ -231,7 +231,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
-            "alice@example.com",    // e-mail
+            "alice@example.com",    // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
@@ -267,12 +267,12 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
-            "john@example.com",     // e-mail
+            "john@example.com",     // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
-        // Duplicate e-mail, different login
+        // Duplicate email, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities());
 
@@ -283,7 +283,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
-        // Duplicate e-mail
+        // Duplicate email
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -302,7 +302,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
-            "badguy@example.com",   // e-mail
+            "badguy@example.com",   // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)));
@@ -326,7 +326,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "funky-log!n",          // login <-- invalid
             "Funky",                // firstName
             "One",                  // lastName
-            "funky@example.com",    // e-mail
+            "funky@example.com",    // email
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))

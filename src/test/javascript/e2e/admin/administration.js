@@ -56,14 +56,6 @@ describe('administration', function () {
         });
     });
 
-    it('should load audits', function () {
-        element(by.css('[ui-sref="audits"]')).click();
-        const expect1 = /audits.title/;
-        element.all(by.css('h2')).first().getAttribute('data-translate').then((value) => {
-            expect(value).toMatch(expect1);
-        });
-    });
-
     it('should load logs', function () {
         element(by.css('[ui-sref="logs"]')).click();
         const expect1 = /logs.title/;
