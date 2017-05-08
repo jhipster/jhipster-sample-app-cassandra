@@ -2,7 +2,6 @@ package io.github.jhipster.sample.domain;
 
 import io.github.jhipster.sample.config.Constants;
 
-import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
@@ -14,6 +13,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.time.Instant;
 
 /**
  * A user.
@@ -59,10 +59,11 @@ public class User implements Serializable {
 
     @Size(max = 20)
     @Column(name = "reset_key")
+    @JsonIgnore
     private String resetKey;
 
     @Column(name = "reset_date")
-    private Date resetDate;
+    private Instant resetDate = null;
 
     @JsonIgnore
     private Set<String> authorities = new HashSet<>();
@@ -140,14 +141,13 @@ public class User implements Serializable {
         this.resetKey = resetKey;
     }
 
-    public Date getResetDate() {
-        return resetDate;
+    public Instant getResetDate() {
+       return resetDate;
     }
 
-    public void setResetDate(Date resetDate) {
-        this.resetDate = resetDate;
+    public void setResetDate(Instant resetDate) {
+       this.resetDate = resetDate;
     }
-
     public String getLangKey() {
         return langKey;
     }

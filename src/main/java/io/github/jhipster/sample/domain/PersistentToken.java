@@ -3,7 +3,6 @@ package io.github.jhipster.sample.domain;
 import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 
 import javax.validation.constraints.NotNull;

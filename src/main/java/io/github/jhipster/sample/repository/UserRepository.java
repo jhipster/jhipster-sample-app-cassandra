@@ -7,8 +7,12 @@ import io.github.jhipster.sample.domain.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Cassandra repository for the User entity.
@@ -17,6 +21,8 @@ import java.util.Optional;
 public class UserRepository {
 
     private final Session session;
+
+    private final Validator validator;
 
     private Mapper<User> mapper;
 
@@ -54,8 +60,9 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(Session session) {
+    public UserRepository(Session session, Validator validator) {
         this.session = session;
+        this.validator = validator;
         mapper = new MappingManager(session).mapper(User.class);
 
         findAllStmt = session.prepare("SELECT * FROM user");
@@ -154,6 +161,10 @@ public class UserRepository {
     }
 
     public User save(User user) {
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (violations != null && !violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         User oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {

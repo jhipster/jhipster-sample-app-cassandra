@@ -7,8 +7,13 @@ import io.github.jhipster.sample.domain.PersistentToken;
 import io.github.jhipster.sample.domain.User;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Cassandra repository for the PersistentToken entity.
@@ -17,6 +22,8 @@ import java.util.List;
 public class PersistentTokenRepository {
 
     private final Session session;
+
+    private final Validator validator;
 
     Mapper<PersistentToken> mapper;
 
@@ -28,8 +35,9 @@ public class PersistentTokenRepository {
 
     private PreparedStatement deletePersistentTokenSeriesByUserIdStmt;
 
-    public PersistentTokenRepository(Session session) {
+    public PersistentTokenRepository(Session session, Validator validator) {
         this.session = session;
+        this.validator = validator;
         mapper = new MappingManager(session).mapper(PersistentToken.class);
 
         findPersistentTokenSeriesByUserIdStmt = session.prepare(
@@ -70,6 +78,10 @@ public class PersistentTokenRepository {
     }
 
     public void save(PersistentToken token) {
+        Set<ConstraintViolation<PersistentToken>> violations = validator.validate(token);
+        if (violations != null && !violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         BatchStatement batch = new BatchStatement();
         batch.add(insertPersistentTokenStmt.bind()
             .setString("series", token.getSeries())

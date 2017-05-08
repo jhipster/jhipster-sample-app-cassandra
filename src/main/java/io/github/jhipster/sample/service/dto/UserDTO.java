@@ -5,6 +5,7 @@ import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.*;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class UserDTO {
 
     private String id;
 
+    @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;

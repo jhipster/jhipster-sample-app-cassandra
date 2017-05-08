@@ -6,13 +6,14 @@ import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.service.dto.UserDTO;
-import java.time.ZonedDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
+import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
