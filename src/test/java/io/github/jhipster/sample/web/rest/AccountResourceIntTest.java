@@ -476,6 +476,46 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     }
 
     @Test
+    @WithMockUser("save-existing-email-and-login")
+    public void testSaveExistingEmailAndLogin() throws Exception {
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        user.setLogin("save-existing-email-and-login");
+        user.setEmail("save-existing-email-and-login@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+
+        userRepository.save(user);
+
+        User anotherUser = new User();
+        anotherUser.setId(UUID.randomUUID().toString());
+        anotherUser.setLogin("save-existing-email-and-login");
+        anotherUser.setEmail("save-existing-email-and-login@example.com");
+        anotherUser.setPassword(RandomStringUtils.random(60));
+        anotherUser.setActivated(true);
+
+        UserDTO userDTO = new UserDTO(
+            null,                   // id
+            "not-used",          // login
+            "firstname",                // firstName
+            "lastname",                  // lastName
+            "save-existing-email-and-login@example.com",    // email
+            false,                   // activated
+            "en",                   // langKey
+            new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN))
+        );
+
+        restMvc.perform(
+            post("/api/account")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+            .andExpect(status().isOk());
+
+        User updatedUser = userRepository.findOneByLogin("save-existing-email-and-login").orElse(null);
+        assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
+    }
+
+    @Test
     @WithMockUser("change-password")
     public void testChangePassword() throws Exception {
         User user = new User();
@@ -523,6 +563,23 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
+        assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+    }
+
+    @Test
+    @WithMockUser("change-password-empty")
+    public void testChangePasswordEmpty() throws Exception {
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(RandomStringUtils.random(60));
+        user.setLogin("change-password-empty");
+        user.setEmail("change-password-empty@example.com");
+        userRepository.save(user);
+
+        restMvc.perform(post("/api/account/change_password").content(RandomStringUtils.random(0)))
+            .andExpect(status().isBadRequest());
+
+        User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
