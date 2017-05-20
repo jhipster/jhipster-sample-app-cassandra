@@ -41,7 +41,7 @@ public class UserDTO {
     private Set<String> authorities;
 
     public UserDTO() {
-        // Empty constructor needed for MapStruct.
+        // Empty constructor needed for Jackson.
     }
 
     public UserDTO(User user) {

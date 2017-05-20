@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 /**
  * Mapper for the entity User and its DTO UserDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDTO userToUserDTO(User user);
+    default UserDTO userToUserDTO(User user) {
+        return new UserDTO(user);
+    }
 
     List<UserDTO> usersToUserDTOs(List<User> users);
 
