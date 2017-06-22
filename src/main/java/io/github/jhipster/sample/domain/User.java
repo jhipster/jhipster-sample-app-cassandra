@@ -18,6 +18,7 @@ import java.time.Instant;
 /**
  * A user.
  */
+
 @Table(name = "user")
 public class User implements Serializable {
 

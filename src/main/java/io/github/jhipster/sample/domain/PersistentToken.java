@@ -15,6 +15,7 @@ import java.util.Date;
  *
  * @see io.github.jhipster.sample.security.PersistentTokenRememberMeServices
  */
+
 @Table(name = "persistent_token")
 public class PersistentToken implements Serializable {
 
