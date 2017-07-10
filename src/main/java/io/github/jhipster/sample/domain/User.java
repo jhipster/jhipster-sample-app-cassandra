@@ -4,6 +4,7 @@ import io.github.jhipster.sample.config.Constants;
 
 import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -84,7 +85,7 @@ public class User implements Serializable {
 
     //Lowercase the login before saving it in database
     public void setLogin(String login) {
-        this.login = login == null ? null : login.toLowerCase(Locale.ENGLISH);
+        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
 
     public String getPassword() {
