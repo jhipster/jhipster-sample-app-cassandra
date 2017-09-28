@@ -1,4 +1,5 @@
 package io.github.jhipster.sample.web.rest;
+import io.github.jhipster.sample.config.Constants;
 
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
@@ -157,7 +158,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Shmoe",                // lastName
             "joe@example.com",      // email
             true,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         restMvc.perform(
@@ -180,7 +181,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "One",                  // lastName
             "funky@example.com",    // email
             true,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -189,7 +190,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase("funky@example.com");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -203,7 +204,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Green",            // lastName
             "invalid",          // email <-- invalid
             true,               // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -226,7 +227,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Green",            // lastName
             "bob@example.com",  // email
             true,               // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -249,7 +250,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Green",            // lastName
             "bob@example.com",  // email
             true,               // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         restUserMockMvc.perform(
@@ -273,7 +274,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Something",            // lastName
             "alice@example.com",    // email
             true,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         // Duplicate login, different email
@@ -294,7 +295,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
-        Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
+        Optional<User> userDup = userRepository.findOneByEmailIgnoreCase("alicejr@example.com");
         assertThat(userDup.isPresent()).isFalse();
     }
 
@@ -309,7 +310,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Doe",                  // lastName
             "john@example.com",     // email
             true,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
 
         // Duplicate email, different login
@@ -330,6 +331,16 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
+        // Duplicate email - with uppercase email address
+        final ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+                validUser.getEmail().toUpperCase(), true, validUser.getLangKey(), validUser.getAuthorities());
+
+        restMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail)))
+            .andExpect(status().is4xxClientError());
+
         Optional<User> userDup = userRepository.findOneByLogin("johnjr");
         assertThat(userDup.isPresent()).isFalse();
     }
@@ -344,7 +355,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "Guy",                  // lastName
             "badguy@example.com",   // email
             true,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN)));
 
         restMvc.perform(
@@ -404,7 +415,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "lastname",                  // lastName
             "save-account@example.com",    // email
             false,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN))
         );
 
@@ -443,7 +454,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "lastname",                  // lastName
             "invalid email",    // email
             false,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN))
         );
 
@@ -453,7 +464,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
 
-        assertThat(userRepository.findOneByEmail("invalid email")).isNotPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")).isNotPresent();
     }
 
     @Test
@@ -484,7 +495,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "lastname",                  // lastName
             "save-existing-email2@example.com",    // email
             false,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN))
         );
 
@@ -517,7 +528,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
             "lastname",                  // lastName
             "save-existing-email-and-login@example.com",    // email
             false,                   // activated
-            "en",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             new HashSet<>(Collections.singletonList(AuthoritiesConstants.ADMIN))
         );
 
@@ -667,6 +678,21 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
 
         restMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRequestPasswordResetUpperCaseEmail() throws Exception {
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setLogin("password-reset");
+        user.setEmail("password-reset@example.com");
+        userRepository.save(user);
+
+        restMvc.perform(post("/api/account/reset-password/init")
+            .content("password-reset@EXAMPLE.COM"))
             .andExpect(status().isOk());
     }
 
