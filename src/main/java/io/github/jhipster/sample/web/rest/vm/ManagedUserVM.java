@@ -27,7 +27,6 @@ public class ManagedUserVM extends UserDTO {
 
         super(id, login, firstName, lastName, email, activated, langKey,
             authorities);
-
         this.password = password;
     }
 

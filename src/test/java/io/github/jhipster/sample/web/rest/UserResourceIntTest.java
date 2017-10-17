@@ -136,7 +136,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
 
         // Create the User
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN,
@@ -169,7 +169,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             UUID.randomUUID().toString(),
             DEFAULT_LOGIN,
@@ -199,7 +199,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN, // this login should already be used
@@ -229,7 +229,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             "anotherlogin",
@@ -301,7 +301,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -338,7 +338,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             UPDATED_LOGIN,
@@ -386,7 +386,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -424,7 +424,7 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             "jhipster", // this login should already be used by anotherUser
@@ -517,5 +517,4 @@ public class UserResourceIntTest extends AbstractCassandraTest {
         assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
         assertThat(userDTO.toString()).isNotNull();
     }
-
 }

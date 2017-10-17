@@ -1,6 +1,5 @@
 package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.config.Constants;
-
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
 import io.github.jhipster.sample.domain.PersistentToken;
@@ -9,10 +8,11 @@ import io.github.jhipster.sample.repository.PersistentTokenRepository;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.MailService;
-import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
+import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
+import io.github.jhipster.sample.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,15 +31,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.Instant;
 import java.util.*;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -66,15 +63,18 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     @Autowired
     private HttpMessageConverter[] httpMessageConverters;
 
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
     @Mock
     private UserService mockUserService;
 
     @Mock
     private MailService mockMailService;
 
-    private MockMvc restUserMockMvc;
-
     private MockMvc restMvc;
+
+    private MockMvc restUserMockMvc;
 
     @Before
     public void setup() {
@@ -83,14 +83,15 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
 
         AccountResource accountResource =
             new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository);
-
         AccountResource accountUserMockResource =
             new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository);
-
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
+            .setControllerAdvice(exceptionTranslator)
             .build();
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).build();
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
+            .setControllerAdvice(exceptionTranslator)
+            .build();
     }
 
     @Test

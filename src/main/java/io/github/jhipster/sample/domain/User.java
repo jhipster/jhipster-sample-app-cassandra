@@ -51,7 +51,7 @@ public class User implements Serializable {
 
     private boolean activated = false;
 
-    @Size(min = 2, max = 5)
+    @Size(min = 2, max = 6)
     @Column(name = "lang_key")
     private String langKey;
 
@@ -151,6 +151,7 @@ public class User implements Serializable {
     public void setResetDate(Instant resetDate) {
        this.resetDate = resetDate;
     }
+
     public String getLangKey() {
         return langKey;
     }
