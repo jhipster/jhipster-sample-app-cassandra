@@ -1,4 +1,5 @@
 package io.github.jhipster.sample.web.rest;
+
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
@@ -14,6 +15,7 @@ import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import io.github.jhipster.sample.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +30,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.time.Instant;
+
 import java.util.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Matchers.anyObject;
@@ -80,9 +83,9 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
-
         AccountResource accountResource =
             new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository);
+
         AccountResource accountUserMockResource =
             new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
