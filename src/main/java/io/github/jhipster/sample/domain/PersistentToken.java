@@ -4,7 +4,6 @@ import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -41,9 +40,8 @@ public class PersistentToken implements Serializable {
 
     @Column(name = "user_agent")
     private String userAgent;
-
-    private String login;
-
+    
+    private String login;    
     @Column(name = "user_id")
     private String userId;
 

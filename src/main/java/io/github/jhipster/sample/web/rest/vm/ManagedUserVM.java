@@ -3,8 +3,6 @@ package io.github.jhipster.sample.web.rest.vm;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
-import java.util.Set;
-
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
@@ -21,17 +19,12 @@ public class ManagedUserVM extends UserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public ManagedUserVM(String id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated, String langKey,
-                         Set<String> authorities) {
-
-        super(id, login, firstName, lastName, email, activated, langKey,
-            authorities);
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

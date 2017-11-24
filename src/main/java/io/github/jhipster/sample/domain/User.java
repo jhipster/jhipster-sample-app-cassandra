@@ -26,6 +26,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
     @PartitionKey
     private String id;
 
@@ -83,7 +84,7 @@ public class User implements Serializable {
         return login;
     }
 
-    //Lowercase the login before saving it in database
+    // Lowercase the login before saving it in database
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
@@ -145,11 +146,11 @@ public class User implements Serializable {
     }
 
     public Instant getResetDate() {
-       return resetDate;
+        return resetDate;
     }
 
     public void setResetDate(Instant resetDate) {
-       this.resetDate = resetDate;
+        this.resetDate = resetDate;
     }
 
     public String getLangKey() {
