@@ -3,9 +3,7 @@ package io.github.jhipster.sample.web.rest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
-import io.github.jhipster.sample.domain.PersistentToken;
 import io.github.jhipster.sample.domain.User;
-import io.github.jhipster.sample.repository.PersistentTokenRepository;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.MailService;
@@ -58,9 +56,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
     private UserService userService;
 
     @Autowired
-    private PersistentTokenRepository persistentTokenRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -84,10 +79,10 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService, persistentTokenRepository);
+            new AccountResource(userRepository, userService, mockMailService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService, persistentTokenRepository);
+            new AccountResource(userRepository, mockUserService, mockMailService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)
@@ -618,60 +613,6 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
 
         User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
-    }
-
-    @Test
-    @WithMockUser("current-sessions")
-    public void testGetCurrentSessions()  throws Exception {
-        User user = new User();
-        user.setId(UUID.randomUUID().toString());
-        user.setPassword(RandomStringUtils.random(60));
-        user.setLogin("current-sessions");
-        user.setEmail("current-sessions@example.com");
-        userRepository.save(user);
-
-        PersistentToken token = new PersistentToken();
-        token.setSeries("current-sessions");
-        token.setUserId(user.getId());
-        token.setTokenValue("current-session-data");
-        token.setTokenDate(new Date(1490714757123L));
-        token.setIpAddress("127.0.0.1");
-        token.setUserAgent("Test agent");
-        persistentTokenRepository.save(token);
-
-        restMvc.perform(get("/api/account/sessions"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
-            .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
-            .andExpect(jsonPath("$.[*].userAgent").value(hasItem(token.getUserAgent())))
-            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem("2017-03-28T15:25:57.123+0000")));
-    }
-
-    @Test
-    @WithMockUser("invalidate-session")
-    public void testInvalidateSession() throws Exception {
-        User user = new User();
-        user.setId(UUID.randomUUID().toString());
-        user.setPassword(RandomStringUtils.random(60));
-        user.setLogin("invalidate-session");
-        user.setEmail("invalidate-session@example.com");
-        userRepository.save(user);
-
-        PersistentToken token = new PersistentToken();
-        token.setSeries("invalidate-session");
-        token.setUserId(user.getId());
-        token.setTokenValue("invalidate-data");
-        token.setTokenDate(new Date(1490714757123L));
-        token.setIpAddress("127.0.0.1");
-        token.setUserAgent("Test agent");
-        persistentTokenRepository.save(token);
-
-        assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
-
-        restMvc.perform(delete("/api/account/sessions/invalidate-session"))
-            .andExpect(status().isOk());
-
-        assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
     }
 
     @Test
