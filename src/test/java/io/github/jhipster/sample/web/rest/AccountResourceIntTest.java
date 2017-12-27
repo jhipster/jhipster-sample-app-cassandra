@@ -158,6 +158,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
         validUser.setActivated(true);
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        assertThat(userRepository.findOneByLogin("joe").isPresent()).isFalse();
 
         restMvc.perform(
             post("/api/register")
@@ -165,8 +166,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
-        Optional<User> user = userRepository.findOneByLogin("joe");
-        assertThat(user.isPresent()).isTrue();
+        assertThat(userRepository.findOneByLogin("joe").isPresent()).isTrue();
     }
 
     @Test

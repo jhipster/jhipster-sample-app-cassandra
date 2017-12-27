@@ -1,5 +1,6 @@
 package io.github.jhipster.sample.service;
 
+
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.repository.UserRepository;
@@ -7,7 +8,6 @@ import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
 import io.github.jhipster.sample.service.util.RandomUtil;
 import io.github.jhipster.sample.service.dto.UserDTO;
-import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

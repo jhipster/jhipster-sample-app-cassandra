@@ -3,7 +3,9 @@ package io.github.jhipster.sample.repository;
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
+
 import io.github.jhipster.sample.domain.User;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
