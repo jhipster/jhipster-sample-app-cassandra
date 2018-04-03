@@ -5,7 +5,7 @@ import io.github.jhipster.sample.config.Constants;
 import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -47,7 +47,7 @@ public class User implements Serializable {
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 100)
+    @Size(min = 5, max = 254)
     private String email;
 
     private boolean activated = false;

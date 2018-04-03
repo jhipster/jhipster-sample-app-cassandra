@@ -29,6 +29,8 @@ import com.datastax.driver.extras.codecs.jdk8.InstantCodec;
 import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
 import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec;
 
+import static java.util.Objects.nonNull;
+
 @Configuration
 @EnableConfigurationProperties(CassandraProperties.class)
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
@@ -72,8 +74,7 @@ public class CassandraConfiguration {
         if (properties.isSsl()) {
             builder.withSSL();
         }
-        String points = properties.getContactPoints();
-        builder.addContactPoints(StringUtils.commaDelimitedListToStringArray(points));
+        builder.addContactPoints(StringUtils.toStringArray(properties.getContactPoints()));
 
         Cluster cluster = builder.build();
 
@@ -98,7 +99,7 @@ public class CassandraConfiguration {
     }
 
     public static <T> T instantiate(Class<T> type) {
-        return BeanUtils.instantiate(type);
+        return BeanUtils.instantiateClass(type);
     }
 
     private QueryOptions getQueryOptions(CassandraProperties properties) {
@@ -115,8 +116,12 @@ public class CassandraConfiguration {
 
     private SocketOptions getSocketOptions(CassandraProperties properties) {
         SocketOptions options = new SocketOptions();
-        options.setConnectTimeoutMillis(properties.getConnectTimeoutMillis());
-        options.setReadTimeoutMillis(properties.getReadTimeoutMillis());
+        if (nonNull(properties.getConnectTimeout())) {
+            options.setConnectTimeoutMillis((int) properties.getConnectTimeout().toMillis());
+        }
+        if (nonNull(properties.getConnectTimeout())) {
+            options.setReadTimeoutMillis((int) properties.getReadTimeout().toMillis());
+        }
         return options;
     }
 

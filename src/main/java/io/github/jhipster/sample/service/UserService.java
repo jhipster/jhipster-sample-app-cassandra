@@ -12,6 +12,7 @@ import io.github.jhipster.sample.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import io.github.jhipster.sample.web.rest.errors.InvalidPasswordException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -149,7 +150,9 @@ public class UserService {
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
-            .findOne(userDTO.getId()))
+            .findById(userDTO.getId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .map(user -> {
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
@@ -172,16 +175,24 @@ public class UserService {
         });
     }
 
-    public void changePassword(String password) {
+    public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                String encryptedPassword = passwordEncoder.encode(password);
+                String currentEncryptedPassword = user.getPassword();
+                assertClearTextPasswordMatchesEncryptedPassword(currentClearTextPassword, currentEncryptedPassword);
+                String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 userRepository.save(user);
                 log.debug("Changed password for User: {}", user);
             });
     }
+        private void assertClearTextPasswordMatchesEncryptedPassword(String clearTextPassword, String encryptedPassword) {
+            if (!passwordEncoder.matches(clearTextPassword,encryptedPassword)){
+                throw new InvalidPasswordException();
+            }
+        }
+
 
 
     public List<UserDTO> getAllManagedUsers() {
@@ -196,11 +207,10 @@ public class UserService {
     }
 
     public Optional<User> getUserWithAuthorities(String id) {
-        return Optional.ofNullable(userRepository.findOne(id));
+        return userRepository.findById(id);
     }
 
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
     }
-
 }
