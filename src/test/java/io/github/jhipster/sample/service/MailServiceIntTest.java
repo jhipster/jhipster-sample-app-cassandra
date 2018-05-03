@@ -47,7 +47,7 @@ public class MailServiceIntTest extends AbstractCassandraTest {
     private JavaMailSenderImpl javaMailSender;
 
     @Captor
-    private ArgumentCaptor messageCaptor;
+    private ArgumentCaptor<MimeMessage> messageCaptor;
 
     private MailService mailService;
 
@@ -61,8 +61,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
     @Test
     public void testSendEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
@@ -74,8 +74,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
     @Test
     public void testSendHtmlEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, true);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
@@ -87,8 +87,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
     @Test
     public void testSendMultipartEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, false);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         MimeMultipart mp = (MimeMultipart) message.getContent();
         MimeBodyPart part = (MimeBodyPart) ((MimeMultipart) mp.getBodyPart(0).getContent()).getBodyPart(0);
         ByteArrayOutputStream aos = new ByteArrayOutputStream();
@@ -104,8 +104,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
     @Test
     public void testSendMultipartHtmlEmail() throws Exception {
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, true);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         MimeMultipart mp = (MimeMultipart) message.getContent();
         MimeBodyPart part = (MimeBodyPart) ((MimeMultipart) mp.getBodyPart(0).getContent()).getBodyPart(0);
         ByteArrayOutputStream aos = new ByteArrayOutputStream();
@@ -125,8 +125,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
         mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("test title");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
@@ -141,8 +141,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendActivationEmail(user);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
         assertThat(message.getContent().toString()).isNotEmpty();
@@ -156,8 +156,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendCreationEmail(user);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
         assertThat(message.getContent().toString()).isNotEmpty();
@@ -171,8 +171,8 @@ public class MailServiceIntTest extends AbstractCassandraTest {
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendPasswordResetMail(user);
-        verify(javaMailSender).send((MimeMessage) messageCaptor.capture());
-        MimeMessage message = (MimeMessage) messageCaptor.getValue();
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
         assertThat(message.getContent().toString()).isNotEmpty();

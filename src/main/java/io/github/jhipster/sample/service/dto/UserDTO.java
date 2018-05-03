@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * A DTO representing a user, with his authorities.
