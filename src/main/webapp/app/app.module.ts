@@ -16,17 +16,8 @@ import { JhipsterCassandraSampleApplicationAppRoutingModule } from './app-routin
 import { JhipsterCassandraSampleApplicationHomeModule } from './home/home.module';
 import { JhipsterCassandraSampleApplicationAccountModule } from './account/account.module';
 import { JhipsterCassandraSampleApplicationEntityModule } from './entities/entity.module';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import {
-    JhiMainComponent,
-    NavbarComponent,
-    FooterComponent,
-    ProfileService,
-    PageRibbonComponent,
-    ActiveMenuDirective,
-    ErrorComponent
-} from './layouts';
+import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
 
 @NgModule({
     imports: [
@@ -42,8 +33,6 @@ import {
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [
-        ProfileService,
-        PaginationConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

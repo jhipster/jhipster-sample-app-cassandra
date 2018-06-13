@@ -7,7 +7,6 @@ import { JhipsterCassandraSampleApplicationSharedModule } from 'app/shared';
 
 import {
     adminState,
-    UserDeleteDialogComponent,
     UserMgmtComponent,
     UserMgmtDetailComponent,
     UserMgmtUpdateComponent,
@@ -18,14 +17,7 @@ import {
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
-    JhiDocsComponent,
-    JhiConfigurationService,
-    JhiHealthService,
-    JhiMetricsService,
-    LogsService,
-    UserResolvePagingParams,
-    UserMgmtResolve,
-    UserResolve
+    JhiDocsComponent
 } from './';
 
 @NgModule({
@@ -35,7 +27,6 @@ import {
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [
-        UserDeleteDialogComponent,
         UserMgmtComponent,
         UserMgmtDetailComponent,
         UserMgmtUpdateComponent,
@@ -48,20 +39,15 @@ import {
         JhiMetricsMonitoringComponent,
         JhiMetricsMonitoringModalComponent
     ],
-    entryComponents: [UserMgmtUpdateComponent, UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
-    providers: [
-        JhiConfigurationService,
-        JhiHealthService,
-        JhiMetricsService,
-        LogsService,
-        UserResolvePagingParams,
-        UserResolve,
-        UserMgmtResolve
-    ],
+    entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterCassandraSampleApplicationAdminModule {
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
     }
 }

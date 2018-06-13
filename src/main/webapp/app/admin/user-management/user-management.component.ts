@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Principal, UserService, User } from 'app/core';
+import { UserMgmtDeleteDialogComponent } from 'app/admin';
 
 @Component({
     selector: 'jhi-user-mgmt',
@@ -18,7 +20,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private alertService: JhiAlertService,
         private principal: Principal,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private modalService: NgbModal
     ) {}
 
     ngOnInit() {
@@ -61,6 +64,19 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
 
     trackIdentity(index, item: User) {
         return item.id;
+    }
+
+    deleteUser(user: User) {
+        const modalRef = this.modalService.open(UserMgmtDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
+        modalRef.result.then(
+            result => {
+                // Left blank intentionally, nothing to do here
+            },
+            reason => {
+                // Left blank intentionally, nothing to do here
+            }
+        );
     }
 
     private onSuccess(data, headers) {
