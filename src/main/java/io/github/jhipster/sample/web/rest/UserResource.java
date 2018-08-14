@@ -137,7 +137,6 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final List<UserDTO> userDTOs = userService.getAllManagedUsers();
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
