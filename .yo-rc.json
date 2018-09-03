@@ -29,7 +29,7 @@
     "jhiPrefix": "jhi",
     "messageBroker": false,
     "serviceDiscoveryType": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX",
     "jwtSecretKey": "5eef31ab4f5f1ad426ce0b1c37066d48f56a3d4c",
     "cacheProvider": "no",
