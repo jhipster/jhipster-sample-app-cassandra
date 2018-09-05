@@ -13,7 +13,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
-import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
+import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
 public class ExceptionTranslator implements ProblemHandling {
 
     /**
-     * Post-process Problem payload to add the message key for front-end if needed
+     * Post-process the Problem payload to add the message key for the front-end if needed
      */
     @Override
     public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
-        if (entity == null || entity.getBody() == null) {
+        if (entity == null) {
             return entity;
         }
         Problem problem = entity.getBody();
@@ -51,7 +51,6 @@ public class ExceptionTranslator implements ProblemHandling {
             builder
                 .with("violations", ((ConstraintViolationProblem) problem).getViolations())
                 .with("message", ErrorConstants.ERR_VALIDATION);
-            return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
         } else {
             builder
                 .withCause(((DefaultProblem) problem).getCause())
@@ -61,8 +60,8 @@ public class ExceptionTranslator implements ProblemHandling {
             if (!problem.getParameters().containsKey("message") && problem.getStatus() != null) {
                 builder.with("message", "error.http." + problem.getStatus().getStatusCode());
             }
-            return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
         }
+        return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
     }
 
     @Override
@@ -82,7 +81,7 @@ public class ExceptionTranslator implements ProblemHandling {
         return create(ex, problem, request);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler
     public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
             .withStatus(Status.NOT_FOUND)
@@ -91,7 +90,7 @@ public class ExceptionTranslator implements ProblemHandling {
         return create(ex, problem, request);
     }
 
-    @ExceptionHandler(BadRequestAlertException.class)
+    @ExceptionHandler
     public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
         return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
