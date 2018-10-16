@@ -30,8 +30,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         JhipsterCassandraSampleApplicationCoreModule,
         JhipsterCassandraSampleApplicationHomeModule,
         JhipsterCassandraSampleApplicationAccountModule,
-        JhipsterCassandraSampleApplicationEntityModule
         // jhipster-needle-angular-add-module JHipster will add new module here
+        JhipsterCassandraSampleApplicationEntityModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [

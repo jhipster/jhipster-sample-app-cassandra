@@ -3,7 +3,7 @@ services:
     jhipstercassandrasampleapplication-app:
         image: jhipstercassandrasampleapplication
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipstercassandrasampleapplication-cassandra
             - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
