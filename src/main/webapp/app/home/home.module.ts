@@ -5,8 +5,8 @@ import { JhipsterCassandraSampleApplicationSharedModule } from 'app/shared';
 import { HOME_ROUTE, HomeComponent } from './';
 
 @NgModule({
-  imports: [JhipsterCassandraSampleApplicationSharedModule, RouterModule.forChild([HOME_ROUTE])],
-  declarations: [HomeComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [JhipsterCassandraSampleApplicationSharedModule, RouterModule.forChild([HOME_ROUTE])],
+    declarations: [HomeComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterCassandraSampleApplicationHomeModule {}
