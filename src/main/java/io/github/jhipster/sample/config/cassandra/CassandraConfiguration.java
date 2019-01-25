@@ -55,10 +55,7 @@ public class CassandraConfiguration {
             .register(InstantCodec.instance)
             .register(new ZonedDateTimeCodec(tupleType));
 
-        if (metricRegistry != null) {
-            cluster.init();
-            metricRegistry.registerAll(cluster.getMetrics().getRegistry());
-        }
+        cluster.init();
     }
 
     @Bean
@@ -103,7 +100,9 @@ public class CassandraConfiguration {
     ClusterBuilderCustomizer clusterBuilderCustomizer(CassandraProperties properties) {
         return builder -> builder
             .withProtocolVersion(protocolVersion)
-            .withPort(getPort(properties));
+            .withPort(getPort(properties))
+            .withoutJMXReporting()
+            .withoutMetrics();
     }
 
     protected int getPort(CassandraProperties properties) {
