@@ -8,12 +8,10 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.service.dto.UserDTO;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,13 +19,20 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test class for the UserResource REST controller.
- *
- * @see UserService
+ * Integration tests for {@link UserService}.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
-public class UserServiceIntTest extends AbstractCassandraTest {
+public class UserServiceIT extends AbstractCassandraTest {
+
+    private static final String DEFAULT_LOGIN = "johndoe";
+
+    private static final String DEFAULT_EMAIL = "johndoe@localhost";
+
+    private static final String DEFAULT_FIRSTNAME = "john";
+
+    private static final String DEFAULT_LASTNAME = "doe";
+
+    private static final String DEFAULT_LANGKEY = "en";
 
     @Autowired
     private UserRepository userRepository;
@@ -37,18 +42,18 @@ public class UserServiceIntTest extends AbstractCassandraTest {
 
     private User user;
 
-    @Before
+    @BeforeEach
     public void init() {
         userRepository.deleteAll();
         user = new User();
         user.setId(UUID.randomUUID().toString());
-        user.setLogin("johndoe");
+        user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setEmail("johndoe@localhost");
-        user.setFirstName("john");
-        user.setLastName("doe");
-        user.setLangKey("en");
+        user.setEmail(DEFAULT_EMAIL);
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+        user.setLangKey(DEFAULT_LANGKEY);
     }
 
     @Test

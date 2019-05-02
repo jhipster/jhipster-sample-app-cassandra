@@ -7,14 +7,12 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.jwt.TokenProvider;
 import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -29,19 +27,16 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 
 /**
- * Test class for the UserJWTController REST controller.
- *
- * @see UserJWTController
+ * Integration tests for the {@link UserJWTController} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
-public class UserJWTControllerIntTest extends AbstractCassandraTest {
+public class UserJWTControllerIT extends AbstractCassandraTest {
 
     @Autowired
     private TokenProvider tokenProvider;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManagerBuilder authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,7 +49,7 @@ public class UserJWTControllerIntTest extends AbstractCassandraTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
         this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)

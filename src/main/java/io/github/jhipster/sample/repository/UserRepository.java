@@ -1,11 +1,10 @@
 package io.github.jhipster.sample.repository;
 
+import io.github.jhipster.sample.domain.User;
+
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
-
-import io.github.jhipster.sample.domain.User;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -17,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Cassandra repository for the User entity.
+ * Cassandra repository for the {@link User} entity.
  */
 @Repository
 public class UserRepository {
@@ -161,7 +160,6 @@ public class UserRepository {
     public List<User> findAll() {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
-
     public User save(User user) {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {

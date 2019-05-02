@@ -5,22 +5,20 @@ import io.github.jhipster.sample.config.Constants;
 import com.datastax.driver.mapping.annotations.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
-import javax.validation.constraints.Email;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.
  */
-
 @Table(name = "user")
 public class User implements Serializable {
 
@@ -173,17 +171,15 @@ public class User implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof User)) {
             return false;
         }
-
-        User user = (User) o;
-        return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
+        return id != null && id.equals(((User) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

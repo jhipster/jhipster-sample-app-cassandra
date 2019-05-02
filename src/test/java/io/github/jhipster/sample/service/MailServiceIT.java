@@ -1,13 +1,13 @@
 package io.github.jhipster.sample.service;
+
 import io.github.jhipster.sample.config.Constants;
 
 import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.Multipart;
@@ -30,9 +29,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+/**
+ * Integration tests for {@link MailService}.
+ */
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
-public class MailServiceIntTest extends AbstractCassandraTest {
+public class MailServiceIT extends AbstractCassandraTest {
 
     @Autowired
     private JHipsterProperties jHipsterProperties;
@@ -51,7 +52,7 @@ public class MailServiceIntTest extends AbstractCassandraTest {
 
     private MailService mailService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));

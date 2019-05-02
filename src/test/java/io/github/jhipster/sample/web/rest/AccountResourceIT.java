@@ -15,9 +15,8 @@ import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -41,13 +39,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Test class for the AccountResource REST controller.
- *
- * @see AccountResource
+ * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
-public class AccountResourceIntTest extends AbstractCassandraTest {
+public class AccountResourceIT extends AbstractCassandraTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -74,7 +69,7 @@ public class AccountResourceIntTest extends AbstractCassandraTest {
 
     private MockMvc restUserMockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());

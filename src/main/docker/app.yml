@@ -1,25 +1,26 @@
 version: '2'
 services:
-    jhipstercassandrasampleapplication-app:
-        image: jhipstercassandrasampleapplication
-        environment:
-            - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            - SPRING_PROFILES_ACTIVE=prod,swagger
-            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipstercassandrasampleapplication-cassandra
-            - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
-        ports:
-            - 8080:8080
-    jhipstercassandrasampleapplication-cassandra:
-        extends:
-            file: cassandra-cluster.yml
-            service: jhipstercassandrasampleapplication-cassandra
-    jhipstercassandrasampleapplication-cassandra-node:
-        image: cassandra:3.9
-        environment:
-            - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
-    jhipstercassandrasampleapplication-cassandra-migration:
-        extends:
-            file: cassandra-migration.yml
-            service: jhipstercassandrasampleapplication-cassandra-migration
-        environment:
-            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+  jhipstercassandrasampleapplication-app:
+    image: jhipstercassandrasampleapplication
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipstercassandrasampleapplication-cassandra
+      - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
+    ports:
+      - 8080:8080
+  jhipstercassandrasampleapplication-cassandra:
+    extends:
+      file: cassandra-cluster.yml
+      service: jhipstercassandrasampleapplication-cassandra
+  jhipstercassandrasampleapplication-cassandra-node:
+    image: cassandra:3.11.4
+    environment:
+      - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
+  jhipstercassandrasampleapplication-cassandra-migration:
+    extends:
+      file: cassandra-migration.yml
+      service: jhipstercassandrasampleapplication-cassandra-migration
+    environment:
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

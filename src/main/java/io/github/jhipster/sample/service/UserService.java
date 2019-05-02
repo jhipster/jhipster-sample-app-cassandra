@@ -87,7 +87,6 @@ public class UserService {
         });
         User newUser = new User();
         newUser.setId(UUID.randomUUID().toString());
-        Set<String> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
@@ -100,6 +99,7 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+        Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.USER);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
@@ -141,10 +141,10 @@ public class UserService {
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
-     * @param firstName first name of user
-     * @param lastName last name of user
-     * @param email email id of user
-     * @param langKey language key
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey) {
         SecurityUtils.getCurrentUserLogin()
@@ -162,8 +162,8 @@ public class UserService {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO user to update
-     * @return updated user
+     * @param userDTO user to update.
+     * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
@@ -206,7 +206,6 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
     }
-
 
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAll().stream()
