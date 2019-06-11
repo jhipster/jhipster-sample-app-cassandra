@@ -7,7 +7,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,swagger
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=jhipstercassandrasampleapplication-cassandra
-      - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
       - 8080:8080
   jhipstercassandrasampleapplication-cassandra:

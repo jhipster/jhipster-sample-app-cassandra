@@ -32,7 +32,7 @@ public class UserServiceIT extends AbstractCassandraTest {
 
     private static final String DEFAULT_LASTNAME = "doe";
 
-    private static final String DEFAULT_LANGKEY = "en";
+    private static final String DEFAULT_LANGKEY = "dummy";
 
     @Autowired
     private UserRepository userRepository;
@@ -67,6 +67,5 @@ public class UserServiceIT extends AbstractCassandraTest {
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-
 
 }
