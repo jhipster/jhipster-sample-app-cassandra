@@ -261,6 +261,7 @@ public class UserResourceIT extends AbstractCassandraTest {
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+
     }
 
     @Test
