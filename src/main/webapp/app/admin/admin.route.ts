@@ -1,8 +1,13 @@
 import { Routes } from '@angular/router';
 
-import { configurationRoute, docsRoute, healthRoute, logsRoute, metricsRoute, userMgmtRoute } from './';
+import { configurationRoute } from './configuration/configuration.route';
+import { docsRoute } from './docs/docs.route';
+import { healthRoute } from './health/health.route';
+import { logsRoute } from './logs/logs.route';
+import { metricsRoute } from './metrics/metrics.route';
+import { userMgmtRoute } from './user-management/user-management.route';
 
-import { UserRouteAccessService } from 'app/core';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 const ADMIN_ROUTES = [configurationRoute, docsRoute, healthRoute, logsRoute, ...userMgmtRoute, metricsRoute];
 

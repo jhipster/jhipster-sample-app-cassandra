@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import { AccountService, UserService, User } from 'app/core';
+import { AccountService } from 'app/core/auth/account.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.model';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 
 @Component({
@@ -15,6 +18,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
   users: User[];
   error: any;
   success: any;
+  userListSubscription: Subscription;
 
   constructor(
     private userService: UserService,
@@ -32,10 +36,14 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    if (this.userListSubscription) {
+      this.eventManager.destroy(this.userListSubscription);
+    }
+  }
 
   registerChangeInUsers() {
-    this.eventManager.subscribe('userListModification', response => this.loadAll());
+    this.userListSubscription = this.eventManager.subscribe('userListModification', response => this.loadAll());
   }
 
   setActive(user, isActivated) {
