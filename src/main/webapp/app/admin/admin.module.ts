@@ -4,10 +4,6 @@ import { JhipsterCassandraSampleApplicationSharedModule } from 'app/shared/share
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import { adminState } from './admin.route';
-import { UserMgmtComponent } from './user-management/user-management.component';
-import { UserMgmtDetailComponent } from './user-management/user-management-detail.component';
-import { UserMgmtUpdateComponent } from './user-management/user-management-update.component';
-import { UserMgmtDeleteDialogComponent } from './user-management/user-management-delete-dialog.component';
 import { LogsComponent } from './logs/logs.component';
 import { JhiMetricsMonitoringComponent } from './metrics/metrics.component';
 import { JhiHealthModalComponent } from './health/health-modal.component';
@@ -22,10 +18,6 @@ import { JhiDocsComponent } from './docs/docs.component';
     RouterModule.forChild(adminState)
   ],
   declarations: [
-    UserMgmtComponent,
-    UserMgmtDetailComponent,
-    UserMgmtUpdateComponent,
-    UserMgmtDeleteDialogComponent,
     LogsComponent,
     JhiConfigurationComponent,
     JhiHealthCheckComponent,
@@ -33,6 +25,6 @@ import { JhiDocsComponent } from './docs/docs.component';
     JhiDocsComponent,
     JhiMetricsMonitoringComponent
   ],
-  entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent]
+  entryComponents: [JhiHealthModalComponent]
 })
 export class JhipsterCassandraSampleApplicationAdminModule {}
