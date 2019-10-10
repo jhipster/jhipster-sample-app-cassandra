@@ -10,13 +10,13 @@
         <table class="table table-striped" aria-describedby="user-management-page-heading">
             <thead>
             <tr>
-                <th><span jhiTranslate="global.field.id">ID</span></th>
-                <th><span jhiTranslate="userManagement.login">Login</span></th>
-                <th><span jhiTranslate="userManagement.email">Email</span></th>
-                <th></th>
-                <th> <span jhiTranslate="userManagement.langKey">Lang Key</span></th>
-                <th><span jhiTranslate="userManagement.profiles">Profiles</span></th>
-                <th></th>
+                <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                <th scope="col" ><span jhiTranslate="userManagement.login">Login</span></th>
+                <th scope="col" ><span jhiTranslate="userManagement.email">Email</span></th>
+                <th scope="col"></th>
+                <th scope="col" > <span jhiTranslate="userManagement.langKey">Lang Key</span></th>
+                <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody *ngIf ="users">
