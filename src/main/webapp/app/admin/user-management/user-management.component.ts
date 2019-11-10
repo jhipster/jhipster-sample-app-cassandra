@@ -43,14 +43,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInUsers() {
-    this.userListSubscription = this.eventManager.subscribe('userListModification', response => this.loadAll());
+    this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
   }
 
   setActive(user, isActivated) {
     user.activated = isActivated;
 
     this.userService.update(user).subscribe(
-      response => {
+      () => {
         this.error = null;
         this.success = 'OK';
         this.loadAll();
@@ -65,7 +65,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   loadAll() {
     this.userService
       .query()
-      .subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers), (res: HttpResponse<any>) => this.onError(res.body));
+      .subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body), (res: HttpResponse<any>) => this.onError(res.body));
   }
 
   trackIdentity(index, item: User) {
@@ -77,7 +77,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.user = user;
   }
 
-  private onSuccess(data, headers) {
+  private onSuccess(data) {
     this.users = data;
   }
 

@@ -58,7 +58,7 @@ public class AbstractCassandraTest {
 
     private static void startTestcontainer() throws TTransportException, IOException {
         CASSANDRA_CONTAINER =
-            new GenericContainer("cassandra:3.11.4")
+            new GenericContainer("cassandra:3.11.5")
                 .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
                 .withExposedPorts(CASSANDRA_TEST_PORT);
 

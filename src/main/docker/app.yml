@@ -15,7 +15,7 @@ services:
       file: cassandra-cluster.yml
       service: jhipstercassandrasampleapplication-cassandra
   jhipstercassandrasampleapplication-cassandra-node:
-    image: cassandra:3.11.4
+    image: cassandra:3.11.5
     environment:
       - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
   jhipstercassandrasampleapplication-cassandra-migration:
