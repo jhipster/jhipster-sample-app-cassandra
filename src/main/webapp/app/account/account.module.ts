@@ -24,4 +24,4 @@ import { accountState } from './account.route';
     SettingsComponent
   ]
 })
-export class JhipsterCassandraSampleApplicationAccountModule {}
+export class AccountModule {}

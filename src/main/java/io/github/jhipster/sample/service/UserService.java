@@ -6,7 +6,8 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
 import io.github.jhipster.sample.service.dto.UserDTO;
-import io.github.jhipster.sample.service.util.RandomUtil;
+
+import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +93,9 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail().toLowerCase());
+        if (userDTO.getEmail() != null) {
+            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        }
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
@@ -120,7 +123,9 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail().toLowerCase());
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
@@ -151,7 +156,9 @@ public class UserService {
             .ifPresent(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setEmail(email.toLowerCase());
+                if (email != null) {
+	                user.setEmail(email.toLowerCase());
+                }
                 user.setLangKey(langKey);
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
@@ -173,7 +180,9 @@ public class UserService {
                 user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail().toLowerCase());
+                if (userDTO.getEmail() != null) {
+                    user.setEmail(userDTO.getEmail().toLowerCase());
+                }
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 user.setAuthorities(userDTO.getAuthorities());

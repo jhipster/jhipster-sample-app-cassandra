@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { JhiEventManager } from 'ng-jhipster';
 
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
 import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
@@ -14,74 +15,49 @@ import { UserManagementDeleteDialogComponent } from './user-management-delete-di
   templateUrl: './user-management.component.html'
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
-  currentAccount: any;
-  users: User[];
-  error: any;
-  success: any;
-  userListSubscription: Subscription;
+  currentAccount: Account | null = null;
+  users: User[] | null = null;
+  userListSubscription?: Subscription;
 
   constructor(
     private userService: UserService,
-    private alertService: JhiAlertService,
     private accountService: AccountService,
     private eventManager: JhiEventManager,
     private modalService: NgbModal
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
       this.currentAccount = account;
       this.loadAll();
-      this.registerChangeInUsers();
+      this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.userListSubscription) {
       this.eventManager.destroy(this.userListSubscription);
     }
   }
 
-  registerChangeInUsers() {
-    this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
+  setActive(user: User, isActivated: boolean): void {
+    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  setActive(user, isActivated) {
-    user.activated = isActivated;
-
-    this.userService.update(user).subscribe(
-      () => {
-        this.error = null;
-        this.success = 'OK';
-        this.loadAll();
-      },
-      () => {
-        this.success = null;
-        this.error = 'ERROR';
-      }
-    );
-  }
-
-  loadAll() {
-    this.userService
-      .query()
-      .subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body), (res: HttpResponse<any>) => this.onError(res.body));
-  }
-
-  trackIdentity(index, item: User) {
+  trackIdentity(index: number, item: User): any {
     return item.id;
   }
 
-  deleteUser(user: User) {
+  deleteUser(user: User): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.user = user;
   }
 
-  private onSuccess(data) {
-    this.users = data;
+  private loadAll(): void {
+    this.userService.query().subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body));
   }
 
-  private onError(error) {
-    this.alertService.error(error.error, error.message, null);
+  private onSuccess(users: User[] | null): void {
+    this.users = users;
   }
 }

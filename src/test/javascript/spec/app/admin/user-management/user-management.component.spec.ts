@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
 
 import { JhipsterCassandraSampleApplicationTestModule } from '../../../test.module';
 import { UserManagementComponent } from 'app/admin/user-management/user-management.component';
@@ -49,7 +49,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(service.query).toHaveBeenCalled();
-          expect(comp.users[0]).toEqual(jasmine.objectContaining({ id: '9fec3727-3421-4967-b213-ba36557ca194' }));
+          expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: '9fec3727-3421-4967-b213-ba36557ca194' }));
         })
       ));
     });
@@ -76,9 +76,9 @@ describe('Component Tests', () => {
           tick(); // simulate async
 
           // THEN
-          expect(service.update).toHaveBeenCalledWith(user);
+          expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
           expect(service.query).toHaveBeenCalled();
-          expect(comp.users[0]).toEqual(jasmine.objectContaining({ id: '9fec3727-3421-4967-b213-ba36557ca194' }));
+          expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: '9fec3727-3421-4967-b213-ba36557ca194' }));
         })
       ));
     });
