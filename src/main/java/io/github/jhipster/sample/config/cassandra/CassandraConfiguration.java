@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.boot.autoconfigure.cassandra.ClusterBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +22,7 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -32,7 +32,7 @@ import java.util.List;
 
 @Configuration
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
-public class CassandraConfiguration implements InitializingBean {
+public class CassandraConfiguration {
 
     @Value("${spring.data.cassandra.protocolVersion:V4}")
     private ProtocolVersion protocolVersion;
@@ -45,8 +45,8 @@ public class CassandraConfiguration implements InitializingBean {
     @Autowired
     private Cluster cluster;
 
-    @Override
-    public void afterPropertiesSet() {
+    @PostConstruct
+    public void postConstruct() {
         TupleType tupleType = cluster.getMetadata()
             .newTupleType(DataType.timestamp(), DataType.varchar());
 

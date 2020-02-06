@@ -16,6 +16,9 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
+  jackson:
+    serialization:
+      write-durations-as-timestamps: false
   data:
     cassandra:
       contactPoints: localhost

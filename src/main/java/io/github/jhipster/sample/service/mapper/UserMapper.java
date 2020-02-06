@@ -57,7 +57,7 @@ public class UserMapper {
     private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
         Set<String> authorities = new HashSet<>();
 
-        if(authoritiesAsString != null) {
+        if (authoritiesAsString != null) {
             authorities = authoritiesAsString.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
