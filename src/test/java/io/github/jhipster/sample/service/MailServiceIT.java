@@ -44,7 +44,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes = JhipsterCassandraSampleApplicationApp.class)
 public class MailServiceIT extends AbstractCassandraTest {
 
-    private static String languages[] = {
+    private static final String[] languages = {
         "en"
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
     };
