@@ -60,6 +60,7 @@ public class User implements Serializable {
 
     @Size(max = 20)
     @Column(name = "reset_key")
+
     @JsonIgnore
     private String resetKey;
 

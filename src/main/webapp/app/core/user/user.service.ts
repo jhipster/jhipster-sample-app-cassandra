@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption, Pagination } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
+import { Authority } from 'app/shared/constants/authority.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -34,6 +35,6 @@ export class UserService {
   }
 
   authorities(): Observable<string[]> {
-    return of(['ROLE_USER', 'ROLE_ADMIN']);
+    return of([Authority.ADMIN, Authority.USER]);
   }
 }
