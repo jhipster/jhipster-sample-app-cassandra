@@ -10,6 +10,6 @@ import { healthRoute } from './health.route';
 @NgModule({
   imports: [JhipsterCassandraSampleApplicationSharedModule, RouterModule.forChild([healthRoute])],
   declarations: [HealthComponent, HealthModalComponent],
-  entryComponents: [HealthModalComponent]
+  entryComponents: [HealthModalComponent],
 })
 export class HealthModule {}

@@ -16,7 +16,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JhipsterCassandraSampleApplicationTestModule],
-        declarations: [UserManagementComponent]
+        declarations: [UserManagementComponent],
       })
         .overrideTemplate(UserManagementComponent, '')
         .compileComponents();
@@ -38,7 +38,7 @@ describe('Component Tests', () => {
             of(
               new HttpResponse({
                 body: [new User('9fec3727-3421-4967-b213-ba36557ca194')],
-                headers
+                headers,
               })
             )
           );
@@ -65,7 +65,7 @@ describe('Component Tests', () => {
             of(
               new HttpResponse({
                 body: [user],
-                headers
+                headers,
               })
             )
           );

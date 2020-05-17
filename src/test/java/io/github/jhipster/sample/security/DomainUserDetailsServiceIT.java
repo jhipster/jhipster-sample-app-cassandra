@@ -38,15 +38,11 @@ public class DomainUserDetailsServiceIT extends AbstractCassandraTest {
     @Autowired
     private UserDetailsService domainUserDetailsService;
 
-    private User userOne;
-    private User userTwo;
-    private User userThree;
-
     @BeforeEach
     public void init() {
         userRepository.deleteAll();
 
-        userOne = new User();
+        User userOne = new User();
         userOne.setId(UUID.randomUUID().toString());
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
@@ -57,7 +53,7 @@ public class DomainUserDetailsServiceIT extends AbstractCassandraTest {
         userOne.setLangKey("en");
         userRepository.save(userOne);
 
-        userTwo = new User();
+        User userTwo = new User();
         userTwo.setId(UUID.randomUUID().toString());
         userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
@@ -68,7 +64,7 @@ public class DomainUserDetailsServiceIT extends AbstractCassandraTest {
         userTwo.setLangKey("en");
         userRepository.save(userTwo);
 
-        userThree = new User();
+        User userThree = new User();
         userThree.setId(UUID.randomUUID().toString());
         userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));

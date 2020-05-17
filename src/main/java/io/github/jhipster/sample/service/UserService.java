@@ -143,29 +143,6 @@ public class UserService {
     }
 
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     */
-    public void updateUser(String firstName, String lastName, String email, String langKey) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                if (email != null) {
-                    user.setEmail(email.toLowerCase());
-                }
-                user.setLangKey(langKey);
-                userRepository.save(user);
-                log.debug("Changed Information for User: {}", user);
-            });
-    }
-
-    /**
      * Update all information for a specific user, and return the modified user.
      *
      * @param userDTO user to update.
@@ -200,6 +177,30 @@ public class UserService {
         });
     }
 
+    /**
+     * Update basic information (first name, last name, email, language) for the current user.
+     *
+     * @param firstName first name of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     */
+    public void updateUser(String firstName, String lastName, String email, String langKey) {
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                if (email != null) {
+                    user.setEmail(email.toLowerCase());
+                }
+                user.setLangKey(langKey);
+                userRepository.save(user);
+                log.debug("Changed Information for User: {}", user);
+            });
+    }
+
+
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -224,10 +225,6 @@ public class UserService {
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login);
-    }
-
-    public Optional<User> getUserWithAuthorities(String id) {
-        return userRepository.findById(id);
     }
 
     public Optional<User> getUserWithAuthorities() {

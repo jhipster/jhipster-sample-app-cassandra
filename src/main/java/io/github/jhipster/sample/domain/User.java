@@ -60,7 +60,6 @@ public class User implements Serializable {
 
     @Size(max = 20)
     @Column(name = "reset_key")
-
     @JsonIgnore
     private String resetKey;
 
@@ -69,6 +68,7 @@ public class User implements Serializable {
 
     @JsonIgnore
     private Set<String> authorities = new HashSet<>();
+
 
     public String getId() {
         return id;
@@ -183,6 +183,7 @@ public class User implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "User{" +

@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Cassandra repository for the {@link User} entity.
+ * Spring Data Cassandra repository for the {@link User} entity.
  */
 @Repository
 public class UserRepository {
