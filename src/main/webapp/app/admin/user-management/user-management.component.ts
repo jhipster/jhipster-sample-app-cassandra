@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -27,11 +27,9 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-      this.loadAll();
-      this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
-    });
+    this.accountService.identity().subscribe(account => (this.currentAccount = account));
+    this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
+    this.loadAll();
   }
 
   ngOnDestroy(): void {
