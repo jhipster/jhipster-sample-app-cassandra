@@ -219,6 +219,7 @@ public class UserResourceIT extends AbstractCassandraTest {
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
+
     @Test
     public void getUser() throws Exception {
         // Initialize the database
