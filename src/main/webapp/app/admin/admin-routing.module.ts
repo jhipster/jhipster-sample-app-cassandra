@@ -14,12 +14,12 @@ import { RouterModule } from '@angular/router';
         },
       },
       {
-        path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
-      },
-      {
         path: 'docs',
         loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
+      },
+      {
+        path: 'configuration',
+        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
       },
       {
         path: 'health',

@@ -21,11 +21,10 @@ spring:
       write-durations-as-timestamps: false
   data:
     cassandra:
-      contactPoints: localhost
-      port: 0
-      protocolVersion: V4
+      contact-points: localhost
       compression: NONE
-      keyspaceName: cassandra_unit_keyspace
+      keyspace-name: cassandra_unit_keyspace
+      local-datacenter: datacenter1
   mail:
     host: localhost
   main:
@@ -77,11 +76,6 @@ jhipster:
         base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: true
-      report-frequency: 60 # in seconds
-
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

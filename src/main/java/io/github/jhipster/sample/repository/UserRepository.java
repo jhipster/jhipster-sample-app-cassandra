@@ -1,19 +1,32 @@
 package io.github.jhipster.sample.repository;
 
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.PagingIterable;
+import com.datastax.oss.driver.api.core.cql.BatchStatement;
+import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.BoundStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.mapper.annotations.Dao;
+import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
+import com.datastax.oss.driver.api.mapper.annotations.DaoKeyspace;
+import com.datastax.oss.driver.api.mapper.annotations.Delete;
+import com.datastax.oss.driver.api.mapper.annotations.Insert;
+import com.datastax.oss.driver.api.mapper.annotations.Mapper;
+import com.datastax.oss.driver.api.mapper.annotations.Select;
 import io.github.jhipster.sample.domain.User;
-
-import com.datastax.driver.core.*;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  * Spring Data Cassandra repository for the {@link User} entity.
@@ -21,13 +34,11 @@ import java.util.Set;
 @Repository
 public class UserRepository {
 
-    private final Session session;
+    private final CqlSession session;
 
     private final Validator validator;
 
-    private Mapper<User> mapper;
-
-    private PreparedStatement findAllStmt;
+    private UserDao userDao;
 
     private PreparedStatement findOneByActivationKeyStmt;
 
@@ -61,64 +72,37 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(Session session, Validator validator) {
+    public UserRepository(CqlSession session, Validator validator, CassandraProperties cassandraProperties) {
         this.session = session;
         this.validator = validator;
-        mapper = new MappingManager(session).mapper(User.class);
+        UserTokenMapper userTokenMapper = new UserTokenMapperBuilder(session).build();
+        userDao = userTokenMapper.userTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
-        findAllStmt = session.prepare("SELECT * FROM user");
+        findOneByActivationKeyStmt =
+            session.prepare("SELECT id " + "FROM user_by_activation_key " + "WHERE activation_key = :activation_key");
 
-        findOneByActivationKeyStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key");
+        findOneByResetKeyStmt = session.prepare("SELECT id " + "FROM user_by_reset_key " + "WHERE reset_key = :reset_key");
 
-        findOneByResetKeyStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key");
+        insertByActivationKeyStmt =
+            session.prepare("INSERT INTO user_by_activation_key (activation_key, id) " + "VALUES (:activation_key, :id)");
 
-        insertByActivationKeyStmt = session.prepare(
-            "INSERT INTO user_by_activation_key (activation_key, id) " +
-                "VALUES (:activation_key, :id)");
+        insertByResetKeyStmt = session.prepare("INSERT INTO user_by_reset_key (reset_key, id) " + "VALUES (:reset_key, :id)");
 
-        insertByResetKeyStmt = session.prepare(
-            "INSERT INTO user_by_reset_key (reset_key, id) " +
-                "VALUES (:reset_key, :id)");
+        deleteByActivationKeyStmt = session.prepare("DELETE FROM user_by_activation_key " + "WHERE activation_key = :activation_key");
 
-        deleteByActivationKeyStmt = session.prepare(
-            "DELETE FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key");
+        deleteByResetKeyStmt = session.prepare("DELETE FROM user_by_reset_key " + "WHERE reset_key = :reset_key");
 
-        deleteByResetKeyStmt = session.prepare(
-            "DELETE FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key");
+        findOneByLoginStmt = session.prepare("SELECT id " + "FROM user_by_login " + "WHERE login = :login");
 
-        findOneByLoginStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_login " +
-                "WHERE login = :login");
+        insertByLoginStmt = session.prepare("INSERT INTO user_by_login (login, id) " + "VALUES (:login, :id)");
 
-        insertByLoginStmt = session.prepare(
-            "INSERT INTO user_by_login (login, id) " +
-                "VALUES (:login, :id)");
+        deleteByLoginStmt = session.prepare("DELETE FROM user_by_login " + "WHERE login = :login");
 
-        deleteByLoginStmt = session.prepare(
-            "DELETE FROM user_by_login " +
-                "WHERE login = :login");
+        findOneByEmailStmt = session.prepare("SELECT id " + "FROM user_by_email " + "WHERE email     = :email");
 
-        findOneByEmailStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_email " +
-                "WHERE email     = :email");
+        insertByEmailStmt = session.prepare("INSERT INTO user_by_email (email, id) " + "VALUES (:email, :id)");
 
-        insertByEmailStmt = session.prepare(
-            "INSERT INTO user_by_email (email, id) " +
-                "VALUES (:email, :id)");
-
-        deleteByEmailStmt = session.prepare(
-            "DELETE FROM user_by_email " +
-                "WHERE email = :email");
+        deleteByEmailStmt = session.prepare("DELETE FROM user_by_email " + "WHERE email = :email");
 
         truncateStmt = session.prepare("TRUNCATE user");
 
@@ -130,42 +114,39 @@ public class UserRepository {
     }
 
     public Optional<User> findById(String id) {
-        return Optional.ofNullable(mapper.get(id));
+        return userDao.get(id);
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {
-        BoundStatement stmt = findOneByActivationKeyStmt.bind();
-        stmt.setString("activation_key", activationKey);
+        BoundStatement stmt = findOneByActivationKeyStmt.bind().setString("activation_key", activationKey);
         return findOneFromIndex(stmt);
     }
 
     public Optional<User> findOneByResetKey(String resetKey) {
-        BoundStatement stmt = findOneByResetKeyStmt.bind();
-        stmt.setString("reset_key", resetKey);
+        BoundStatement stmt = findOneByResetKeyStmt.bind().setString("reset_key", resetKey);
         return findOneFromIndex(stmt);
     }
 
     public Optional<User> findOneByEmailIgnoreCase(String email) {
-        BoundStatement stmt = findOneByEmailStmt.bind();
-        stmt.setString("email", email.toLowerCase());
+        BoundStatement stmt = findOneByEmailStmt.bind().setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
     }
 
     public Optional<User> findOneByLogin(String login) {
-        BoundStatement stmt = findOneByLoginStmt.bind();
-        stmt.setString("login", login);
+        BoundStatement stmt = findOneByLoginStmt.bind().setString("login", login);
         return findOneFromIndex(stmt);
     }
 
     public List<User> findAll() {
-        return mapper.map(session.execute(findAllStmt.bind())).all();
+        return userDao.findAll().all();
     }
+
     public User save(User user) {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        User oldUser = mapper.get(user.getId());
+        User oldUser = userDao.get(user.getId()).orElse(null);
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
                 session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey()));
@@ -180,50 +161,39 @@ public class UserRepository {
                 session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase()));
             }
         }
-        BatchStatement batch = new BatchStatement();
-        batch.add(mapper.saveQuery(user));
+        BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
+        batch.addStatement(userDao.saveQuery(user));
         if (!StringUtils.isEmpty(user.getActivationKey())) {
-            batch.add(insertByActivationKeyStmt.bind()
-                .setString("activation_key", user.getActivationKey())
-                .setString("id", user.getId()));
+            batch.addStatement(
+                insertByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()).setString("id", user.getId())
+            );
         }
         if (!StringUtils.isEmpty(user.getResetKey())) {
-            batch.add(insertByResetKeyStmt.bind()
-                .setString("reset_key", user.getResetKey())
-                .setString("id", user.getId()));
+            batch.addStatement(insertByResetKeyStmt.bind().setString("reset_key", user.getResetKey()).setString("id", user.getId()));
         }
-        batch.add(insertByLoginStmt.bind()
-            .setString("login", user.getLogin())
-            .setString("id", user.getId()));
-        batch.add(insertByEmailStmt.bind()
-            .setString("email", user.getEmail().toLowerCase())
-            .setString("id", user.getId()));
-        session.execute(batch);
+        batch.addStatement(insertByLoginStmt.bind().setString("login", user.getLogin()).setString("id", user.getId()));
+        batch.addStatement(insertByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()).setString("id", user.getId()));
+        session.execute(batch.build());
         return user;
     }
 
     public void delete(User user) {
-        BatchStatement batch = new BatchStatement();
-        batch.add(mapper.deleteQuery(user));
+        BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
+        batch.addStatement(userDao.deleteQuery(user));
         if (!StringUtils.isEmpty(user.getActivationKey())) {
-            batch.add(deleteByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()));
+            batch.addStatement(deleteByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()));
         }
         if (!StringUtils.isEmpty(user.getResetKey())) {
-            batch.add(deleteByResetKeyStmt.bind().setString("reset_key", user.getResetKey()));
+            batch.addStatement(deleteByResetKeyStmt.bind().setString("reset_key", user.getResetKey()));
         }
-        batch.add(deleteByLoginStmt.bind().setString("login", user.getLogin()));
-        batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
-        session.execute(batch);
+        batch.addStatement(deleteByLoginStmt.bind().setString("login", user.getLogin()));
+        batch.addStatement(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
+        session.execute(batch.build());
     }
 
     private Optional<User> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
-        if (rs.isExhausted()) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(rs.one().getString("id"))
-            .map(id -> Optional.ofNullable(mapper.get(id)))
-            .get();
+        return Optional.ofNullable(rs.one()).map(row -> row.getString("id")).flatMap(id -> userDao.get(id));
     }
 
     public void deleteAll() {
@@ -239,4 +209,25 @@ public class UserRepository {
         BoundStatement truncateByResetKey = truncateByResetKeyStmt.bind();
         session.execute(truncateByResetKey);
     }
+}
+
+@Dao
+interface UserDao {
+    @Select
+    Optional<User> get(String id);
+
+    @Select
+    PagingIterable<User> findAll();
+
+    @Insert
+    BoundStatement saveQuery(User user);
+
+    @Delete
+    BoundStatement deleteQuery(User user);
+}
+
+@Mapper
+interface UserTokenMapper {
+    @DaoFactory
+    UserDao userTokenDao(@DaoKeyspace CqlIdentifier keyspace);
 }

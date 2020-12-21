@@ -1,25 +1,28 @@
 package io.github.jhipster.sample.domain;
 
-import io.github.jhipster.sample.config.Constants;
-
-import com.datastax.driver.mapping.annotations.*;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.NamingStrategy;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import io.github.jhipster.sample.config.Constants;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A user.
  */
-@Table(name = "user")
+@Entity
+@NamingStrategy(convention = NamingConvention.SNAKE_CASE_INSENSITIVE)
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,9 +41,11 @@ public class User implements Serializable {
     private String password;
 
     @Size(max = 50)
+    @CqlName("firstname")
     private String firstName;
 
     @Size(max = 50)
+    @CqlName("lastname")
     private String lastName;
 
     @Email
@@ -50,25 +55,20 @@ public class User implements Serializable {
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
-    @Column(name = "lang_key")
     private String langKey;
 
     @Size(max = 20)
-    @Column(name = "activation_key")
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)
-    @Column(name = "reset_key")
     @JsonIgnore
     private String resetKey;
 
-    @Column(name = "reset_date")
     private Instant resetDate = null;
 
     @JsonIgnore
     private Set<String> authorities = new HashSet<>();
-
 
     public String getId() {
         return id;
@@ -119,7 +119,7 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public boolean getActivated() {
+    public boolean isActivated() {
         return activated;
     }
 
@@ -180,7 +180,8 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore
