@@ -3,9 +3,9 @@ import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.model';
+import { Account } from 'app/core/auth/account.model';
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
 import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
 
 @Component({
@@ -17,7 +17,7 @@ export class UserManagementComponent implements OnInit {
   users: User[] | null = null;
   isLoading = false;
 
-  constructor(private userService: UserService, private accountService: AccountService, private modalService: NgbModal) {}
+  constructor(private userService: UserManagementService, private accountService: AccountService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => (this.currentAccount = account));
@@ -45,7 +45,7 @@ export class UserManagementComponent implements OnInit {
 
   loadAll(): void {
     this.isLoading = true;
-    this.userService.queryAsAdmin().subscribe(
+    this.userService.query().subscribe(
       (res: HttpResponse<User[]>) => {
         this.isLoading = false;
         this.onSuccess(res.body);
