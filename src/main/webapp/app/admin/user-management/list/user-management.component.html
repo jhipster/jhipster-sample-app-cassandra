@@ -4,7 +4,8 @@
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon> <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
         <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
@@ -20,11 +21,19 @@
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span jhiTranslate="userManagement.login">Login</span></th>
-          <th scope="col"><span jhiTranslate="userManagement.email">Email</span></th>
+          <th scope="col">
+            <span jhiTranslate="global.field.id">ID</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="userManagement.login">Login</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="userManagement.email">Email</span>
+          </th>
           <th scope="col"></th>
-          <th scope="col"><span jhiTranslate="userManagement.langKey">Lang Key</span></th>
+          <th scope="col">
+            <span jhiTranslate="userManagement.langKey">Lang Key</span>
+          </th>
           <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
           <th scope="col"></th>
         </tr>

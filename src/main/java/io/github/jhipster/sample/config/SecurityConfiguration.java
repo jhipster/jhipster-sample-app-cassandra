@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/index.html")
+            .antMatchers("/swagger-ui/**")
             .antMatchers("/test/**");
     }
 

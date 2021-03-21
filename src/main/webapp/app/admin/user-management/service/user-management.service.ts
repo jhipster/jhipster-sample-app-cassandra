@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUser } from '../user-management.model';
@@ -10,9 +10,9 @@ import { Authority } from 'app/config/authority.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
-  public resourceUrl = SERVER_API_URL + 'api/admin/users';
+  public resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   create(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(this.resourceUrl, user);
