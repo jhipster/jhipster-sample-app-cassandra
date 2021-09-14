@@ -64,12 +64,10 @@ class AccountResourceIT extends AbstractCassandraTest {
         restAccountMockMvc
             .perform(
                 get("/api/authenticate")
-                    .with(
-                        request -> {
-                            request.setRemoteUser(TEST_USER_LOGIN);
-                            return request;
-                        }
-                    )
+                    .with(request -> {
+                        request.setRemoteUser(TEST_USER_LOGIN);
+                        return request;
+                    })
                     .accept(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isOk())

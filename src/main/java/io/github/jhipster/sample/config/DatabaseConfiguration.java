@@ -11,12 +11,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
-import tech.jhipster.config.JHipsterConstants;
 
 @Configuration
 public class DatabaseConfiguration {
@@ -43,7 +41,7 @@ public class DatabaseConfiguration {
     @WritingConverter
     class ZonedDateTimeToTupleConverter implements Converter<ZonedDateTime, TupleValue> {
 
-        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.ASCII);
+        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.TEXT);
 
         @Override
         public TupleValue convert(@Nonnull ZonedDateTime source) {

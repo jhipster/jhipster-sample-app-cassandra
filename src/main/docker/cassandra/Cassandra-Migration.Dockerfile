@@ -1,4 +1,4 @@
-FROM cassandra:3.11.10
+FROM cassandra:3.11.11
 
 # script to orchestrate the automatic keyspace creation and apply all migration scripts
 ADD cassandra/scripts/autoMigrate.sh /usr/local/bin/autoMigrate

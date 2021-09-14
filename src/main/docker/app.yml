@@ -14,7 +14,7 @@ services:
     ports:
       - 127.0.0.1:8080:8080
   jhipstercassandrasampleapplication-cassandra:
-    image: cassandra:3.11.10
+    image: cassandra:3.11.11
     # volumes:
     #   - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
@@ -26,7 +26,7 @@ services:
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
   jhipstercassandrasampleapplication-cassandra-node:
-    image: cassandra:3.11.10
+    image: cassandra:3.11.11
     environment:
       - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
   jhipstercassandrasampleapplication-cassandra-migration:

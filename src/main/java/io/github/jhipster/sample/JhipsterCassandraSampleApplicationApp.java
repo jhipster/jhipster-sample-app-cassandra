@@ -96,7 +96,7 @@ public class JhipsterCassandraSampleApplicationApp {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles()
+            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
         );
     }
 }
