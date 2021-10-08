@@ -134,8 +134,8 @@ jhipster:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: jhipsterCassandraSampleApplication API
-    description: jhipsterCassandraSampleApplication API documentation
+    title: Jhipster Cassandra Sample Application API
+    description: Jhipster Cassandra Sample Application API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
