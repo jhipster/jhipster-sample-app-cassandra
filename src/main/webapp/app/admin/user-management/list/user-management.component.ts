@@ -45,13 +45,13 @@ export class UserManagementComponent implements OnInit {
 
   loadAll(): void {
     this.isLoading = true;
-    this.userService.query().subscribe(
-      (res: HttpResponse<User[]>) => {
+    this.userService.query().subscribe({
+      next: (res: HttpResponse<User[]>) => {
         this.isLoading = false;
         this.onSuccess(res.body);
       },
-      () => (this.isLoading = false)
-    );
+      error: () => (this.isLoading = false),
+    });
   }
 
   private onSuccess(users: User[] | null): void {
