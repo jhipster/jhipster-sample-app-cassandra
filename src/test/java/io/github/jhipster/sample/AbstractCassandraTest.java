@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
 import tech.jhipster.config.JHipsterConstants;
 
 /**
@@ -41,7 +42,7 @@ public class AbstractCassandraTest {
 
     static {
         CASSANDRA_CONTAINER =
-            new GenericContainer("cassandra:3.11.11")
+            new GenericContainer(DockerImageName.parse("cassandra:3.11.11")) // TODO replace by CassandraContainer
                 .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
                 .withExposedPorts(CASSANDRA_TEST_PORT);
     }
