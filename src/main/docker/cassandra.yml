@@ -2,7 +2,7 @@
 version: '3.8'
 services:
   jhipstercassandrasampleapplication-cassandra:
-    image: cassandra:3.11.11
+    image: cassandra:3.11.12
     # volumes:
     #   - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,

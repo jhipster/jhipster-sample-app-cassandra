@@ -42,7 +42,7 @@ public class AbstractCassandraTest {
 
     static {
         CASSANDRA_CONTAINER =
-            new GenericContainer(DockerImageName.parse("cassandra:3.11.11")) // TODO replace by CassandraContainer
+            new GenericContainer(DockerImageName.parse("cassandra:3.11.12")) // TODO replace by CassandraContainer
                 .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
                 .withExposedPorts(CASSANDRA_TEST_PORT);
     }
