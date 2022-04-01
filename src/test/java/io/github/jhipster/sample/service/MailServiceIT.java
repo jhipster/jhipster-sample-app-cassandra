@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
@@ -39,7 +38,7 @@ import tech.jhipster.config.JHipsterProperties;
  * Integration tests for {@link MailService}.
  */
 @IntegrationTest
-class MailServiceIT extends AbstractCassandraTest {
+class MailServiceIT {
 
     private static final String[] languages = {
         "en",
@@ -135,9 +134,9 @@ class MailServiceIT extends AbstractCassandraTest {
     @Test
     void testSendEmailFromTemplate() throws Exception {
         User user = new User();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
-        user.setLangKey("en");
         mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();

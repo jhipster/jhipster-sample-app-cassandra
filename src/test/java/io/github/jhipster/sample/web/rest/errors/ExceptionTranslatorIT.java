@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
-class ExceptionTranslatorIT extends AbstractCassandraTest {
+class ExceptionTranslatorIT {
 
     @Autowired
     private MockMvc mockMvc;

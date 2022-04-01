@@ -3,7 +3,6 @@ package io.github.jhipster.sample.security;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
@@ -20,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @IntegrationTest
-class DomainUserDetailsServiceIT extends AbstractCassandraTest {
+class DomainUserDetailsServiceIT {
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";

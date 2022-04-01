@@ -16,20 +16,17 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
+
   jackson:
     serialization:
       write-durations-as-timestamps: false
   data:
     cassandra:
-      contact-points: localhost
       compression: NONE
-      keyspace-name: cassandra_unit_keyspace
-      local-datacenter: datacenter1
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -45,7 +42,7 @@ spring:
     scheduling:
       thread-name-prefix: jhipster-cassandra-sample-application-scheduling-
       pool:
-        size: 1
+        size: 20
   thymeleaf:
     mode: HTML
 
@@ -58,7 +55,6 @@ server:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
 jhipster:
   clientApp:
     name: 'jhipsterCassandraSampleApplicationApp'

@@ -2,7 +2,6 @@ package io.github.jhipster.sample.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.jhipster.sample.AbstractCassandraTest;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
@@ -19,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Integration tests for {@link UserService}.
  */
 @IntegrationTest
-class UserServiceIT extends AbstractCassandraTest {
+class UserServiceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
