@@ -16,7 +16,6 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
-
   jackson:
     serialization:
       write-durations-as-timestamps: false
@@ -58,6 +57,9 @@ server:
 jhipster:
   clientApp:
     name: 'jhipsterCassandraSampleApplicationApp'
+  mail:
+    from: jhipsterCassandraSampleApplication@localhost.com
+    base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
     use-json-format: false
@@ -66,9 +68,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-  mail:
-    from: test@localhost
-    base-url: http://127.0.0.1:8080
   security:
     authentication:
       jwt:
@@ -76,6 +75,7 @@ jhipster:
         base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -86,3 +86,7 @@ jhipster:
 # ===================================================================
 
 # application:
+management:
+  health:
+    mail:
+      enabled: false

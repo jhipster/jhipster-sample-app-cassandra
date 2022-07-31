@@ -44,7 +44,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void destroy() {
         if (null != cassandraContainer && cassandraContainer.isRunning()) {
-            cassandraContainer.stop();
+            cassandraContainer.close();
         }
     }
 
@@ -52,7 +52,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     public void afterPropertiesSet() {
         if (null == cassandraContainer) {
             cassandraContainer =
-                (CassandraContainer) new CassandraContainer("cassandra:3.11.12")
+                (CassandraContainer) new CassandraContainer("cassandra:3.11.13")
                     .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
                     .withLogConsumer(new Slf4jLogConsumer(log))
                     .withReuse(true);

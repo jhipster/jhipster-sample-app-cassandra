@@ -5,6 +5,7 @@ import org.cassandraunit.CQLDataLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -16,6 +17,7 @@ import org.testcontainers.containers.CassandraContainer;
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+
     private static CassandraTestContainer cassandraBean;
 
     @Override
@@ -26,15 +28,11 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
             if (null != cassandraAnnotation) {
                 log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
-                if (cassandraBean == null) {
-                    log.info("Warming up the cassandra database");
-                    cassandraBean = new CassandraTestContainer();
-                    beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
-                    beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-                    ((DefaultSingletonBeanRegistry) beanFactory).registerDisposableBean(
-                            CassandraTestContainer.class.getName().toLowerCase(),
-                            cassandraBean
-                        );
+                log.info("Warming up the cassandra database");
+                if (null == cassandraBean) {
+                    cassandraBean = beanFactory.createBean(CassandraTestContainer.class);
+                    beanFactory.registerSingleton(CassandraTestContainer.class.getName(), cassandraBean);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName(), cassandraBean);
                 }
                 testValues =
                     testValues
@@ -52,7 +50,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                             cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
                         );
             }
-
             testValues.applyTo(context);
         };
     }

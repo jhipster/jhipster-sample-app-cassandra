@@ -10,7 +10,6 @@ import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
-import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import java.util.*;
@@ -75,7 +74,7 @@ class UserResourceIT {
         User user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setLogin(DEFAULT_LOGIN);
-        user.setPassword(RandomStringUtils.random(60));
+        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
@@ -129,6 +128,7 @@ class UserResourceIT {
             assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
             assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         });
+        userRepository.deleteAll();
     }
 
     @Test
@@ -155,6 +155,7 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+        userRepository.deleteAll();
     }
 
     @Test
@@ -182,6 +183,7 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+        userRepository.deleteAll();
     }
 
     @Test
@@ -209,6 +211,7 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+        userRepository.deleteAll();
     }
 
     @Test
@@ -226,6 +229,7 @@ class UserResourceIT {
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+        userRepository.deleteAll();
     }
 
     @Test
@@ -243,6 +247,8 @@ class UserResourceIT {
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+
+        userRepository.deleteAll();
     }
 
     @Test
@@ -285,6 +291,7 @@ class UserResourceIT {
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+        userRepository.deleteAll();
     }
 
     @Test
@@ -323,6 +330,7 @@ class UserResourceIT {
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+        userRepository.deleteAll();
     }
 
     @Test
@@ -333,7 +341,7 @@ class UserResourceIT {
         User anotherUser = new User();
         anotherUser.setId(UUID.randomUUID().toString());
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.random(60));
+        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
@@ -360,6 +368,7 @@ class UserResourceIT {
                 put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
             )
             .andExpect(status().isBadRequest());
+        userRepository.deleteAll();
     }
 
     @Test
@@ -370,7 +379,7 @@ class UserResourceIT {
         User anotherUser = new User();
         anotherUser.setId(UUID.randomUUID().toString());
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.random(60));
+        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
@@ -397,6 +406,7 @@ class UserResourceIT {
                 put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
             )
             .andExpect(status().isBadRequest());
+        userRepository.deleteAll();
     }
 
     @Test
