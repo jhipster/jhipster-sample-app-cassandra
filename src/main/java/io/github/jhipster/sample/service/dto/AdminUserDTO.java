@@ -2,13 +2,16 @@ package io.github.jhipster.sample.service.dto;
 
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
+import java.io.Serializable;
 import java.util.Set;
 import javax.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.
  */
-public class AdminUserDTO {
+public class AdminUserDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String id;
 
