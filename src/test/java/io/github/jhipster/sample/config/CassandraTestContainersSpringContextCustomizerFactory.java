@@ -1,7 +1,8 @@
 package io.github.jhipster.sample.config;
 
+import static io.github.jhipster.sample.config.CassandraTestContainer.DEFAULT_KEYSPACE_NAME;
+
 import java.util.List;
-import org.cassandraunit.CQLDataLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -14,9 +15,9 @@ import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.testcontainers.containers.CassandraContainer;
 
-public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
+public class CassandraTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
-    private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+    private Logger log = LoggerFactory.getLogger(CassandraTestContainersSpringContextCustomizerFactory.class);
 
     private static CassandraTestContainer cassandraBean;
 
@@ -36,17 +37,15 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 }
                 testValues =
                     testValues
+                        .and("spring.cassandra.port=" + cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
+                        .and("spring.cassandra.contact-points=" + cassandraBean.getCassandraContainer().getHost())
+                        .and("spring.cassandra.keyspace-name=" + DEFAULT_KEYSPACE_NAME)
                         .and(
-                            "spring.data.cassandra.port=" + cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT)
-                        )
-                        .and("spring.data.cassandra.contact-points=" + cassandraBean.getCassandraContainer().getHost())
-                        .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
-                        .and(
-                            "spring.data.cassandra.local-datacenter=" +
+                            "spring.cassandra.local-datacenter=" +
                             cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter()
                         )
                         .and(
-                            "spring.data.cassandra.cluster-name=" +
+                            "spring.cassandra.session-name=" +
                             cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
                         );
             }

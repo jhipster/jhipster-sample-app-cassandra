@@ -1,6 +1,6 @@
-version: '3.8'
+name: jhipstercassandrasampleapplication
 services:
-  jhipstercassandrasampleapplication-cassandra-migration:
+  cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=jhipstercassandrasampleapplication-cassandra
       - USER=docker-cassandra-migration

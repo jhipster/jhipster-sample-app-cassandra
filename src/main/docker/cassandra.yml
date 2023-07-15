@@ -1,8 +1,9 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-version: '3.8'
+name: jhipstercassandrasampleapplication
 services:
-  jhipstercassandrasampleapplication-cassandra:
-    image: cassandra:3.11.13
+  cassandra:
+    image: cassandra:3.11.14
+    container_name: jhipstercassandrasampleapplication-cassandra
     # volumes:
     #   - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
@@ -13,12 +14,17 @@ services:
       - 127.0.0.1:7199:7199
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
-  jhipstercassandrasampleapplication-cassandra-migration:
+    healthcheck:
+      test: ['CMD-SHELL', '[ $$(nodetool statusgossip) = running ]']
+      interval: 5s
+      timeout: 25s
+      retries: 10
+  cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=jhipstercassandrasampleapplication-cassandra
       - USER=docker-cassandra-migration
       # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-      - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     build:
       context: .
       dockerfile: cassandra/Cassandra-Migration.Dockerfile

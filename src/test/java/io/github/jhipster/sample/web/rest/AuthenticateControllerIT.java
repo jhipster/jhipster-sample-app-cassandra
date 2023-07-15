@@ -22,11 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Integration tests for the {@link UserJWTController} REST controller.
+ * Integration tests for the {@link AuthenticateController} REST controller.
  */
 @AutoConfigureMockMvc
 @IntegrationTest
-class UserJWTControllerIT {
+class AuthenticateControllerIT {
 
     @Autowired
     private UserRepository userRepository;

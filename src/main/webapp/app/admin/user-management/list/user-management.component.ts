@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import SharedModule from 'app/shared/shared.module';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
-import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
+import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
 
 @Component({
+  standalone: true,
   selector: 'jhi-user-mgmt',
   templateUrl: './user-management.component.html',
+  imports: [RouterModule, SharedModule, SortDirective, SortByDirective, UserManagementDeleteDialogComponent],
 })
-export class UserManagementComponent implements OnInit {
+export default class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
   users: User[] | null = null;
   isLoading = false;
