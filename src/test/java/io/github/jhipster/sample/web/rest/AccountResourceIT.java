@@ -239,8 +239,8 @@ class AccountResourceIT {
 
         Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com");
         assertThat(testUser).isPresent();
-        testUser.get().setActivated(true);
-        userRepository.save(testUser.get());
+        testUser.orElseThrow().setActivated(true);
+        userRepository.save(testUser.orElseThrow());
 
         // Second (already activated) user
         restAccountMockMvc
@@ -311,10 +311,10 @@ class AccountResourceIT {
 
         Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3");
         assertThat(testUser4).isPresent();
-        assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
+        assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
-        testUser4.get().setActivated(true);
-        userService.updateUser((new AdminUserDTO(testUser4.get())));
+        testUser4.orElseThrow().setActivated(true);
+        userService.updateUser((new AdminUserDTO(testUser4.orElseThrow())));
 
         // Register 4th (already activated) user
         restAccountMockMvc
@@ -340,7 +340,7 @@ class AccountResourceIT {
 
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup).isPresent();
-        assertThat(userDup.get().getAuthorities()).hasSize(1).containsExactly(AuthoritiesConstants.USER);
+        assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1).containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
