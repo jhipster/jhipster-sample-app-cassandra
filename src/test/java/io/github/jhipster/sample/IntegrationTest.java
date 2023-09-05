@@ -1,6 +1,5 @@
 package io.github.jhipster.sample;
 
-import io.github.jhipster.sample.JhipsterCassandraSampleApplicationApp;
 import io.github.jhipster.sample.config.AsyncSyncConfiguration;
 import io.github.jhipster.sample.config.EmbeddedCassandra;
 import java.lang.annotation.ElementType;

@@ -10,7 +10,6 @@ import io.github.jhipster.sample.service.dto.UserDTO;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -226,11 +225,11 @@ public class UserService {
     }
 
     public List<AdminUserDTO> getAllManagedUsers() {
-        return userRepository.findAll().stream().map(AdminUserDTO::new).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(AdminUserDTO::new).toList();
     }
 
     public List<UserDTO> getAllPublicUsers() {
-        return userRepository.findAll().stream().filter(user -> user.isActivated()).map(UserDTO::new).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(user -> user.isActivated()).map(UserDTO::new).toList();
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
