@@ -226,11 +226,11 @@ public class UserService {
     }
 
     public List<AdminUserDTO> getAllManagedUsers() {
-        return userRepository.findAll().stream().map(AdminUserDTO::new).toList();
+        return userRepository.findAll().stream().map(AdminUserDTO::new).collect(Collectors.toList());
     }
 
     public List<UserDTO> getAllPublicUsers() {
-        return userRepository.findAll().stream().filter(user -> user.isActivated()).map(UserDTO::new).toList();
+        return userRepository.findAll().stream().filter(user -> user.isActivated()).map(UserDTO::new).collect(Collectors.toList());
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {

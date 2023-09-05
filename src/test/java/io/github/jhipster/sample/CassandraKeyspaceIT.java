@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.metadata.Metadata;
-import io.github.jhipster.sample.config.CassandraTestContainer;
+import org.cassandraunit.CQLDataLoader;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,8 +15,8 @@ public class CassandraKeyspaceIT {
     private CqlSession session;
 
     @Test
-    void shouldListCassandraTestKeyspace() {
+    void shouldListCassandraUnitKeyspace() {
         Metadata metadata = session.getMetadata();
-        assertThat(metadata.getKeyspace(CassandraTestContainer.DEFAULT_KEYSPACE_NAME)).isNotNull();
+        assertThat(metadata.getKeyspace(CQLDataLoader.DEFAULT_KEYSPACE_NAME)).isNotNull();
     }
 }

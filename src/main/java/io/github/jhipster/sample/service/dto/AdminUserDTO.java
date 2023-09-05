@@ -2,9 +2,9 @@ package io.github.jhipster.sample.service.dto;
 
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Set;
+import javax.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.
