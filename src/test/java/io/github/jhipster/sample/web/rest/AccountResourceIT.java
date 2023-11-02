@@ -235,7 +235,7 @@ class AccountResourceIT {
         // Second (already activated) user
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(secondUser)))
-            .andExpect(status().isCreated());
+            .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -309,7 +309,7 @@ class AccountResourceIT {
         // Register 4th (already activated) user
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(secondUser)))
-            .andExpect(status().isCreated());
+            .andExpect(status().is4xxClientError());
     }
 
     @Test
