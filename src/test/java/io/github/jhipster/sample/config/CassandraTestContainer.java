@@ -40,7 +40,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     public void afterPropertiesSet() throws IOException {
         if (null == cassandraContainer) {
             cassandraContainer =
-                new CassandraContainer<>("cassandra:3.11.14")
+                new CassandraContainer<>("cassandra:4.1.3")
                     .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
                     .withLogConsumer(new Slf4jLogConsumer(log))
                     .withReuse(true);
