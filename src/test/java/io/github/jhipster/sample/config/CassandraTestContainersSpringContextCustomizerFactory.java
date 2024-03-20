@@ -33,19 +33,17 @@ public class CassandraTestContainersSpringContextCustomizerFactory implements Co
                     beanFactory.registerSingleton(CassandraTestContainer.class.getName(), cassandraBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName(), cassandraBean);
                 }
-                testValues =
-                    testValues
-                        .and("spring.cassandra.port=" + cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
-                        .and("spring.cassandra.contact-points=" + cassandraBean.getCassandraContainer().getHost())
-                        .and("spring.cassandra.keyspace-name=" + DEFAULT_KEYSPACE_NAME)
-                        .and(
-                            "spring.cassandra.local-datacenter=" +
-                            cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter()
-                        )
-                        .and(
-                            "spring.cassandra.session-name=" +
-                            cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
-                        );
+                testValues = testValues
+                    .and("spring.cassandra.port=" + cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
+                    .and("spring.cassandra.contact-points=" + cassandraBean.getCassandraContainer().getHost())
+                    .and("spring.cassandra.keyspace-name=" + DEFAULT_KEYSPACE_NAME)
+                    .and(
+                        "spring.cassandra.local-datacenter=" +
+                        cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter()
+                    )
+                    .and(
+                        "spring.cassandra.session-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
+                    );
             }
             testValues.applyTo(context);
         };

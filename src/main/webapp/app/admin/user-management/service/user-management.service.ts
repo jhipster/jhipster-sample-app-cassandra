@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
@@ -10,12 +10,10 @@ import { IUser } from '../user-management.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  private http = inject(HttpClient);
+  private applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    private http: HttpClient,
-    private applicationConfigService: ApplicationConfigService,
-  ) {}
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
   create(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(this.resourceUrl, user);

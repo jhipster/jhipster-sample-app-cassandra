@@ -39,11 +39,10 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void afterPropertiesSet() throws IOException {
         if (null == cassandraContainer) {
-            cassandraContainer =
-                new CassandraContainer<>("cassandra:4.1.3")
-                    .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
-                    .withLogConsumer(new Slf4jLogConsumer(log))
-                    .withReuse(true);
+            cassandraContainer = new CassandraContainer<>("cassandra:5.0")
+                .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
+                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withReuse(true);
         }
         if (!cassandraContainer.isRunning()) {
             cassandraContainer.start();
@@ -57,16 +56,16 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
             );
             cqlSession.close();
 
-            cqlSession =
-                new CqlSessionBuilder()
-                    .addContactPoint(cassandraContainer.getContactPoint())
-                    .withLocalDatacenter(cassandraContainer.getLocalDatacenter())
-                    .withKeyspace(DEFAULT_KEYSPACE_NAME)
-                    .withConfigLoader(getConfigLoader())
-                    .build();
+            cqlSession = new CqlSessionBuilder()
+                .addContactPoint(cassandraContainer.getContactPoint())
+                .withLocalDatacenter(cassandraContainer.getLocalDatacenter())
+                .withKeyspace(DEFAULT_KEYSPACE_NAME)
+                .withConfigLoader(getConfigLoader())
+                .build();
 
-            new ResourceKeyspacePopulator(new PathMatchingResourcePatternResolver().getResources("config/cql/changelog/*.cql"))
-                .populate(cqlSession);
+            new ResourceKeyspacePopulator(new PathMatchingResourcePatternResolver().getResources("config/cql/changelog/*.cql")).populate(
+                cqlSession
+            );
 
             cqlSession.close();
         }
@@ -77,8 +76,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
     }
 
     private DriverConfigLoader getConfigLoader() {
-        return DriverConfigLoader
-            .programmaticBuilder()
+        return DriverConfigLoader.programmaticBuilder()
             .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT))
             .build();
     }

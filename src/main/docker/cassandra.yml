@@ -2,7 +2,7 @@
 name: jhipstercassandrasampleapplication
 services:
   cassandra:
-    image: cassandra:4.1.3
+    image: cassandra:5.0
     container_name: jhipstercassandrasampleapplication-cassandra
     # volumes:
     #   - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data

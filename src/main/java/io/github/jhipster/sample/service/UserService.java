@@ -154,8 +154,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
-        return Optional
-            .of(userRepository.findById(userDTO.getId()))
+        return Optional.of(userRepository.findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
@@ -193,8 +192,7 @@ public class UserService {
      * @param langKey   language key.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey) {
-        SecurityUtils
-            .getCurrentUserLogin()
+        SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
                 user.setFirstName(firstName);
@@ -209,8 +207,7 @@ public class UserService {
     }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils
-            .getCurrentUserLogin()
+        SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
                 String currentEncryptedPassword = user.getPassword();

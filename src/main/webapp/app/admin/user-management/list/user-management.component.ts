@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
 import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
@@ -15,21 +13,17 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
   standalone: true,
   selector: 'jhi-user-mgmt',
   templateUrl: './user-management.component.html',
-  imports: [RouterModule, SharedModule, SortDirective, SortByDirective, UserManagementDeleteDialogComponent],
+  imports: [RouterModule, SharedModule, UserManagementDeleteDialogComponent],
 })
 export default class UserManagementComponent implements OnInit {
-  currentAccount: Account | null = null;
-  users: User[] | null = null;
-  isLoading = false;
+  currentAccount = inject(AccountService).trackCurrentAccount();
+  users = signal<User[] | null>(null);
+  isLoading = signal(false);
 
-  constructor(
-    private userService: UserManagementService,
-    private accountService: AccountService,
-    private modalService: NgbModal,
-  ) {}
+  private userService = inject(UserManagementService);
+  private modalService = inject(NgbModal);
 
   ngOnInit(): void {
-    this.accountService.identity().subscribe(account => (this.currentAccount = account));
     this.loadAll();
   }
 
@@ -53,17 +47,17 @@ export default class UserManagementComponent implements OnInit {
   }
 
   loadAll(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.userService.query().subscribe({
       next: (res: HttpResponse<User[]>) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.onSuccess(res.body);
       },
-      error: () => (this.isLoading = false),
+      error: () => this.isLoading.set(false),
     });
   }
 
   private onSuccess(users: User[] | null): void {
-    this.users = users;
+    this.users.set(users);
   }
 }

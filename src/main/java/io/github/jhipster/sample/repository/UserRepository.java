@@ -77,13 +77,15 @@ public class UserRepository {
         UserTokenMapper userTokenMapper = new UserTokenMapperBuilder(session).build();
         userDao = userTokenMapper.userTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
-        findOneByActivationKeyStmt =
-            session.prepare("SELECT id " + "FROM user_by_activation_key " + "WHERE activation_key = :activation_key");
+        findOneByActivationKeyStmt = session.prepare(
+            "SELECT id " + "FROM user_by_activation_key " + "WHERE activation_key = :activation_key"
+        );
 
         findOneByResetKeyStmt = session.prepare("SELECT id " + "FROM user_by_reset_key " + "WHERE reset_key = :reset_key");
 
-        insertByActivationKeyStmt =
-            session.prepare("INSERT INTO user_by_activation_key (activation_key, id) " + "VALUES (:activation_key, :id)");
+        insertByActivationKeyStmt = session.prepare(
+            "INSERT INTO user_by_activation_key (activation_key, id) " + "VALUES (:activation_key, :id)"
+        );
 
         insertByResetKeyStmt = session.prepare("INSERT INTO user_by_reset_key (reset_key, id) " + "VALUES (:reset_key, :id)");
 
