@@ -5,6 +5,7 @@ import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @IntegrationTest
 class UserServiceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String DEFAULT_LOGIN = "johndoe_service";
 
-    private static final String DEFAULT_EMAIL = "johndoe@localhost";
+    private static final String DEFAULT_EMAIL = "johndoe_service@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
 
@@ -34,7 +35,6 @@ class UserServiceIT {
 
     @BeforeEach
     public void init() {
-        userRepository.deleteAll();
         user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setLogin(DEFAULT_LOGIN);
@@ -44,5 +44,10 @@ class UserServiceIT {
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
         user.setLangKey(DEFAULT_LANGKEY);
+    }
+
+    @AfterEach
+    public void cleanupAndCheck() {
+        userRepository.deleteAll();
     }
 }

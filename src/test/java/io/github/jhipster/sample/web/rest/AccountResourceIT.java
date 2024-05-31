@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -52,6 +53,11 @@ class AccountResourceIT {
 
     @Autowired
     private MockMvc restAccountMockMvc;
+
+    @AfterEach
+    public void cleanupAndCheck() {
+        userRepository.deleteAll();
+    }
 
     @Test
     @WithUnauthenticatedMockUser
@@ -96,6 +102,8 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
             .andExpect(jsonPath("$.langKey").value("en"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+
+        userService.deleteUser(TEST_USER_LOGIN);
     }
 
     @Test
@@ -120,6 +128,8 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 
         assertThat(userRepository.findOneByLogin("test-register-valid")).isPresent();
+
+        userService.deleteUser("test-register-valid");
     }
 
     @Test
@@ -222,6 +232,8 @@ class AccountResourceIT {
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(secondUser)))
             .andExpect(status().is4xxClientError());
+
+        userService.deleteUser("alice");
     }
 
     @Test
@@ -292,6 +304,8 @@ class AccountResourceIT {
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(secondUser)))
             .andExpect(status().is4xxClientError());
+
+        userService.deleteUser("test-register-duplicate-email-3");
     }
 
     @Test
@@ -313,6 +327,8 @@ class AccountResourceIT {
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1).containsExactly(AuthoritiesConstants.USER);
+
+        userService.deleteUser("badguy");
     }
 
     @Test
@@ -332,6 +348,8 @@ class AccountResourceIT {
 
         user = userRepository.findOneByLogin(user.getLogin()).orElse(null);
         assertThat(user.isActivated()).isTrue();
+
+        userService.deleteUser("activate-account");
     }
 
     @Test
@@ -371,6 +389,8 @@ class AccountResourceIT {
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
         assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
+
+        userService.deleteUser("save-account");
     }
 
     @Test
@@ -399,6 +419,8 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 
         assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")).isNotPresent();
+
+        userService.deleteUser("save-invalid-email");
     }
 
     @Test
@@ -434,8 +456,11 @@ class AccountResourceIT {
             .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
             .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin("save-existing-email").orElse(null);
+        User updatedUser = userRepository.findOneByLogin("save-existing-email").orElseThrow();
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
+
+        userService.deleteUser("save-existing-email");
+        userService.deleteUser("save-existing-email2");
     }
 
     @Test
@@ -464,6 +489,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("save-existing-email-and-login").orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
+
+        userService.deleteUser("save-existing-email-and-login");
     }
 
     @Test
@@ -488,6 +515,8 @@ class AccountResourceIT {
         User updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password-wrong-existing-password");
     }
 
     @Test
@@ -511,6 +540,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password");
     }
 
     @Test
@@ -536,6 +567,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-small").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-small");
     }
 
     @Test
@@ -561,6 +594,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-long");
     }
 
     @Test
@@ -584,6 +619,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-empty");
     }
 
     @Test
@@ -600,6 +637,8 @@ class AccountResourceIT {
         restAccountMockMvc
             .perform(post("/api/account/reset-password/init").content("password-reset@example.com"))
             .andExpect(status().isOk());
+
+        userService.deleteUser("password-reset");
     }
 
     @Test
@@ -616,6 +655,8 @@ class AccountResourceIT {
         restAccountMockMvc
             .perform(post("/api/account/reset-password/init").content("password-reset-upper-case@EXAMPLE.COM"))
             .andExpect(status().isOk());
+
+        userService.deleteUser("password-reset-upper-case");
     }
 
     @Test
@@ -650,6 +691,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin(user.getLogin()).orElse(null);
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("finish-password-reset");
     }
 
     @Test
@@ -677,6 +720,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin(user.getLogin()).orElse(null);
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
+
+        userService.deleteUser("finish-password-reset-too-small");
     }
 
     @Test

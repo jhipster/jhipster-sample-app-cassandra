@@ -3,12 +3,15 @@ package io.github.jhipster.sample.service.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.domain.User;
+import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +40,37 @@ class UserMapperTest {
         user.setLastName("doe");
         user.setLangKey("en");
 
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+
         userDto = new AdminUserDTO(user);
+    }
+
+    @Test
+    void testUserToUserDTO() {
+        AdminUserDTO convertedUserDto = userMapper.userToAdminUserDTO(user);
+
+        assertThat(convertedUserDto.getId()).isEqualTo(user.getId());
+        assertThat(convertedUserDto.getLogin()).isEqualTo(user.getLogin());
+        assertThat(convertedUserDto.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(convertedUserDto.getLastName()).isEqualTo(user.getLastName());
+        assertThat(convertedUserDto.getEmail()).isEqualTo(user.getEmail());
+        assertThat(convertedUserDto.isActivated()).isEqualTo(user.isActivated());
+        assertThat(convertedUserDto.getLangKey()).isEqualTo(user.getLangKey());
+        assertThat(convertedUserDto.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+    }
+
+    @Test
+    void testUserDTOtoUser() {
+        User convertedUser = userMapper.userDTOToUser(userDto);
+
+        assertThat(convertedUser.getId()).isEqualTo(userDto.getId());
+        assertThat(convertedUser.getLogin()).isEqualTo(userDto.getLogin());
+        assertThat(convertedUser.getFirstName()).isEqualTo(userDto.getFirstName());
+        assertThat(convertedUser.getLastName()).isEqualTo(userDto.getLastName());
+        assertThat(convertedUser.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(convertedUser.isActivated()).isEqualTo(userDto.isActivated());
+        assertThat(convertedUser.getLangKey()).isEqualTo(userDto.getLangKey());
+        assertThat(convertedUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
@@ -95,27 +128,23 @@ class UserMapperTest {
 
     @Test
     void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
-        Set<String> authoritiesAsString = new HashSet<>();
-        authoritiesAsString.add("ADMIN");
-        userDto.setAuthorities(authoritiesAsString);
+        User convertedUser = userMapper.userDTOToUser(userDto);
 
-        User user = userMapper.userDTOToUser(userDto);
-
-        assertThat(user).isNotNull();
-        assertThat(user.getAuthorities()).isNotNull();
-        assertThat(user.getAuthorities()).isNotEmpty();
-        assertThat(user.getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        assertThat(convertedUser).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotEmpty();
+        assertThat(convertedUser.getAuthorities().iterator().next()).isEqualTo(AuthoritiesConstants.USER);
     }
 
     @Test
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        User user = userMapper.userDTOToUser(userDto);
+        User persistUser = userMapper.userDTOToUser(userDto);
 
-        assertThat(user).isNotNull();
-        assertThat(user.getAuthorities()).isNotNull();
-        assertThat(user.getAuthorities()).isEmpty();
+        assertThat(persistUser).isNotNull();
+        assertThat(persistUser.getAuthorities()).isNotNull();
+        assertThat(persistUser.getAuthorities()).isEmpty();
     }
 
     @Test
