@@ -23,7 +23,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
 
     public static final String DEFAULT_KEYSPACE_NAME = "cassandratestkeyspace";
 
-    private static final Logger log = LoggerFactory.getLogger(CassandraTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CassandraTestContainer.class);
     private static final Integer DATABASE_REQUEST_TIMEOUT = 20;
     private static final Integer CONTAINER_STARTUP_TIMEOUT_MINUTES = 10;
 
@@ -41,7 +41,7 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
         if (null == cassandraContainer) {
             cassandraContainer = new CassandraContainer<>("cassandra:5.0")
                 .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
-                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
         if (!cassandraContainer.isRunning()) {
