@@ -20,8 +20,8 @@ export default class UserManagementComponent implements OnInit {
   users = signal<User[] | null>(null);
   isLoading = signal(false);
 
-  private userService = inject(UserManagementService);
-  private modalService = inject(NgbModal);
+  private readonly userService = inject(UserManagementService);
+  private readonly modalService = inject(NgbModal);
 
   ngOnInit(): void {
     this.loadAll();
