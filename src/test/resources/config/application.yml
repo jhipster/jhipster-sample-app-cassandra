@@ -16,7 +16,6 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
-  cloud:
   jackson:
     serialization:
       write-durations-as-timestamps: false

@@ -1,6 +1,6 @@
 export type HealthStatus = 'UP' | 'DOWN' | 'UNKNOWN' | 'OUT_OF_SERVICE';
 
-export type HealthKey = 'binders' | 'diskSpace' | 'mail' | 'ping' | 'livenessState' | 'readinessState' | 'cassandra';
+export type HealthKey = 'diskSpace' | 'mail' | 'ping' | 'livenessState' | 'readinessState' | 'cassandra';
 
 export interface Health {
   status: HealthStatus;
