@@ -34,7 +34,7 @@ class UserServiceIT {
     private User user;
 
     @BeforeEach
-    public void init() {
+    void init() {
         user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setLogin(DEFAULT_LOGIN);
@@ -47,7 +47,7 @@ class UserServiceIT {
     }
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
         userRepository.deleteAll();
     }
 }

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
@@ -47,6 +49,8 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     private static final String PATH_KEY = "path";
     private static final boolean CASUAL_CHAIN_ENABLED = false;
 
+    private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -58,6 +62,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleAnyException(Throwable ex, NativeWebRequest request) {
+        LOG.debug("Converting Exception to Problem Details:", ex);
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
