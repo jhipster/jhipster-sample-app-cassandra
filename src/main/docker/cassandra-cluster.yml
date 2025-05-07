@@ -3,7 +3,7 @@ name: jhipstercassandrasampleapplication
 services:
   cassandra:
     container_name: jhipstercassandrasampleapplication-cassandra
-    image: cassandra:5.0
+    image: cassandra:5.0.2
     # volumes:
     #   - ~/volumes/jhipster/jhipsterCassandraSampleApplication/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
@@ -15,7 +15,7 @@ services:
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
   cassandra-node:
-    image: cassandra:5.0
+    image: cassandra:5.0.2
     environment:
       - CASSANDRA_SEEDS=jhipstercassandrasampleapplication-cassandra
   cassandra-migration:
