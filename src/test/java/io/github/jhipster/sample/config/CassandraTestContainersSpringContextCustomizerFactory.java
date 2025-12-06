@@ -43,11 +43,18 @@ public class CassandraTestContainersSpringContextCustomizerFactory implements Co
                         .and("spring.cassandra.keyspace-name=" + DEFAULT_KEYSPACE_NAME)
                         .and(
                             "spring.cassandra.local-datacenter=" +
-                            cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter()
+                                cassandraBean
+                                    .getCassandraContainer()
+                                    .getCluster()
+                                    .getMetadata()
+                                    .getAllHosts()
+                                    .iterator()
+                                    .next()
+                                    .getDatacenter()
                         )
                         .and(
                             "spring.cassandra.session-name=" +
-                            cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
+                                cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName()
                         );
                 }
                 testValues.applyTo(context);

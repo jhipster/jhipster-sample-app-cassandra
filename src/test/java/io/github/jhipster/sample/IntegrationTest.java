@@ -16,5 +16,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = { JhipsterCassandraSampleApplicationApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class })
 @EmbeddedCassandra
-public @interface IntegrationTest {
-}
+public @interface IntegrationTest {}

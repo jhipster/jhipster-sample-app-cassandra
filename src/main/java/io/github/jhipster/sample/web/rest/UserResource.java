@@ -70,7 +70,7 @@ public class UserResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:jhipsterCassandraSampleApplication}")
     private String applicationName;
 
     private final UserService userService;

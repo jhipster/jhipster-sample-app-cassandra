@@ -194,7 +194,9 @@ public class UserRepository {
 
     private Optional<User> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
-        return Optional.ofNullable(rs.one()).map(row -> row.getString("id")).flatMap(id -> userDao.get(id));
+        return Optional.ofNullable(rs.one())
+            .map(row -> row.getString("id"))
+            .flatMap(id -> userDao.get(id));
     }
 
     public void deleteAll() {
