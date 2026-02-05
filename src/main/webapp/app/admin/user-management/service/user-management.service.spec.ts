@@ -1,4 +1,5 @@
-import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpErrorResponse } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -12,7 +13,7 @@ describe('User Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
 
     service = TestBed.inject(UserManagementService);

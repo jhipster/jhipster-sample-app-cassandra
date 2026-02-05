@@ -23,7 +23,7 @@ import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

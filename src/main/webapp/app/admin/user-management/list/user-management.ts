@@ -2,10 +2,14 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
-import SharedModule from 'app/shared/shared.module';
+import { Alert } from 'app/shared/alert/alert';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { TranslateDirective } from 'app/shared/language';
 import UserManagementDeleteDialog from '../delete/user-management-delete-dialog';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
@@ -13,7 +17,7 @@ import { User } from '../user-management.model';
 @Component({
   selector: 'jhi-user-mgmt',
   templateUrl: './user-management.html',
-  imports: [RouterLink, SharedModule],
+  imports: [RouterLink, FontAwesomeModule, AlertError, Alert, NgbModule, TranslateDirective, TranslateModule],
 })
 export default class UserManagement implements OnInit {
   currentAccount = inject(AccountService).trackCurrentAccount();

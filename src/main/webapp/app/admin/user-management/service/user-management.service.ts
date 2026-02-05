@@ -3,10 +3,10 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { Authority } from 'app/config/authority.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
+import { Authority } from 'app/shared/jhipster/constants';
 import { IUser } from '../user-management.model';
 
 @Injectable({ providedIn: 'root' })

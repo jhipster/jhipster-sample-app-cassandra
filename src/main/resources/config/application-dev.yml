@@ -27,7 +27,7 @@ spring:
       additional-exclude: static/**
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
-  jackson:
+  jackson2:
     serialization:
       indent-output: true
   cassandra:

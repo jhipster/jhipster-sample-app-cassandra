@@ -16,7 +16,7 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
-  jackson:
+  jackson2:
     serialization:
       write-durations-as-timestamps: false
   cassandra:
