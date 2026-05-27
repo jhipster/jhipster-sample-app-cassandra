@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -17,6 +17,7 @@ import { IUserManagement } from '../user-management.model';
 
 @Component({
   selector: 'jhi-user-mgmt',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management.html',
   imports: [RouterLink, FontAwesomeModule, AlertError, Alert, NgbPagination, TranslateDirective, TranslateModule],
 })

@@ -78,32 +78,80 @@ public class UserRepository {
         userDao = userTokenMapper.userTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
         findOneByActivationKeyStmt = session.prepare(
-            "SELECT id " + "FROM user_by_activation_key " + "WHERE activation_key = :activation_key"
+            """
+            SELECT id
+            FROM user_by_activation_key
+            WHERE activation_key = :activation_key"""
         );
 
-        findOneByResetKeyStmt = session.prepare("SELECT id " + "FROM user_by_reset_key " + "WHERE reset_key = :reset_key");
+        findOneByResetKeyStmt = session.prepare(
+            """
+            SELECT id
+            FROM user_by_reset_key
+            WHERE reset_key = :reset_key"""
+        );
 
         insertByActivationKeyStmt = session.prepare(
-            "INSERT INTO user_by_activation_key (activation_key, id) " + "VALUES (:activation_key, :id)"
+            """
+            INSERT INTO user_by_activation_key (activation_key, id)
+            VALUES (:activation_key, :id)"""
         );
 
-        insertByResetKeyStmt = session.prepare("INSERT INTO user_by_reset_key (reset_key, id) " + "VALUES (:reset_key, :id)");
+        insertByResetKeyStmt = session.prepare(
+            """
+            INSERT INTO user_by_reset_key (reset_key, id)
+            VALUES (:reset_key, :id)"""
+        );
 
-        deleteByActivationKeyStmt = session.prepare("DELETE FROM user_by_activation_key " + "WHERE activation_key = :activation_key");
+        deleteByActivationKeyStmt = session.prepare(
+            """
+            DELETE FROM user_by_activation_key
+            WHERE activation_key = :activation_key"""
+        );
 
-        deleteByResetKeyStmt = session.prepare("DELETE FROM user_by_reset_key " + "WHERE reset_key = :reset_key");
+        deleteByResetKeyStmt = session.prepare(
+            """
+            DELETE FROM user_by_reset_key
+            WHERE reset_key = :reset_key"""
+        );
 
-        findOneByLoginStmt = session.prepare("SELECT id " + "FROM user_by_login " + "WHERE login = :login");
+        findOneByLoginStmt = session.prepare(
+            """
+            SELECT id
+            FROM user_by_login
+            WHERE login = :login"""
+        );
 
-        insertByLoginStmt = session.prepare("INSERT INTO user_by_login (login, id) " + "VALUES (:login, :id)");
+        insertByLoginStmt = session.prepare(
+            """
+            INSERT INTO user_by_login (login, id)
+            VALUES (:login, :id)"""
+        );
 
-        deleteByLoginStmt = session.prepare("DELETE FROM user_by_login " + "WHERE login = :login");
+        deleteByLoginStmt = session.prepare(
+            """
+            DELETE FROM user_by_login
+            WHERE login = :login"""
+        );
 
-        findOneByEmailStmt = session.prepare("SELECT id " + "FROM user_by_email " + "WHERE email     = :email");
+        findOneByEmailStmt = session.prepare(
+            """
+            SELECT id
+            FROM user_by_email
+            WHERE email     = :email"""
+        );
 
-        insertByEmailStmt = session.prepare("INSERT INTO user_by_email (email, id) " + "VALUES (:email, :id)");
+        insertByEmailStmt = session.prepare(
+            """
+            INSERT INTO user_by_email (email, id)
+            VALUES (:email, :id)"""
+        );
 
-        deleteByEmailStmt = session.prepare("DELETE FROM user_by_email " + "WHERE email = :email");
+        deleteByEmailStmt = session.prepare(
+            """
+            DELETE FROM user_by_email
+            WHERE email = :email"""
+        );
 
         truncateStmt = session.prepare("TRUNCATE user");
 

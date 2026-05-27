@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +38,7 @@ class UserMapperTest {
         user.setLastName("doe");
         user.setLangKey("en");
 
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        user.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         userDto = new AdminUserDTO(user);
     }
@@ -107,9 +105,9 @@ class UserMapperTest {
         List<User> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
-        assertThat(users.get(0).getAuthorities()).isNotNull();
-        assertThat(users.get(0).getAuthorities()).isNotEmpty();
-        assertThat(users.get(0).getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        assertThat(users.getFirst().getAuthorities()).isNotNull();
+        assertThat(users.getFirst().getAuthorities()).isNotEmpty();
+        assertThat(users.getFirst().getAuthorities().iterator().next()).isEqualTo("ADMIN");
     }
 
     @Test
@@ -122,8 +120,8 @@ class UserMapperTest {
         List<User> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
-        assertThat(users.get(0).getAuthorities()).isNotNull();
-        assertThat(users.get(0).getAuthorities()).isEmpty();
+        assertThat(users.getFirst().getAuthorities()).isNotNull();
+        assertThat(users.getFirst().getAuthorities()).isEmpty();
     }
 
     @Test

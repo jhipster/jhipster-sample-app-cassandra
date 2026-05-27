@@ -114,7 +114,7 @@ class AccountResourceIT {
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid")).isEmpty();
 
         restAccountMockMvc
@@ -136,7 +136,7 @@ class AccountResourceIT {
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(invalidUser)))
@@ -181,7 +181,7 @@ class AccountResourceIT {
         invalidUser.setEmail(email);
         invalidUser.setActivated(activated);
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
         return invalidUser;
     }
 
@@ -195,7 +195,7 @@ class AccountResourceIT {
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -240,7 +240,7 @@ class AccountResourceIT {
         firstUser.setLastName("Test");
         firstUser.setEmail("test-register-duplicate-email@example.com");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Register first user
         restAccountMockMvc
@@ -312,7 +312,7 @@ class AccountResourceIT {
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(validUser)))
@@ -369,7 +369,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
             .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -406,7 +406,7 @@ class AccountResourceIT {
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
             .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -444,7 +444,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
             .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -475,7 +475,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
             .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))

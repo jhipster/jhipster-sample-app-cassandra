@@ -110,7 +110,7 @@ class UserResourceIT {
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         var returnedUserDTO = om.readValue(
             restUserMockMvc
@@ -143,7 +143,7 @@ class UserResourceIT {
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc
@@ -167,7 +167,7 @@ class UserResourceIT {
         userDTO.setEmail("anothermail@localhost");
         userDTO.setActivated(true);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Create the User
         restUserMockMvc
@@ -191,7 +191,7 @@ class UserResourceIT {
         userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
         userDTO.setActivated(true);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Create the User
         restUserMockMvc
@@ -258,7 +258,7 @@ class UserResourceIT {
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setLangKey(UPDATED_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -296,7 +296,7 @@ class UserResourceIT {
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setLangKey(UPDATED_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -345,7 +345,7 @@ class UserResourceIT {
         userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setLangKey(updatedUser.getLangKey());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
@@ -379,7 +379,7 @@ class UserResourceIT {
         userDTO.setEmail(updatedUser.getEmail());
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setLangKey(updatedUser.getLangKey());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         restUserMockMvc
             .perform(put("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
