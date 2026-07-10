@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Alert } from 'app/shared/alert/alert';
@@ -19,7 +18,7 @@ import { IUserManagement } from '../user-management.model';
   selector: 'jhi-user-mgmt',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management.html',
-  imports: [RouterLink, FontAwesomeModule, AlertError, Alert, NgbPagination, TranslateDirective, TranslateModule],
+  imports: [RouterLink, FontAwesomeModule, AlertError, Alert, NgbPagination, TranslateDirective],
 })
 export class UserManagement implements OnInit {
   readonly currentAccount = inject(AccountService).account;
