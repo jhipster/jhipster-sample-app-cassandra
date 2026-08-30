@@ -16,9 +16,10 @@
 spring:
   application:
     name: jhipsterCassandraSampleApplication
-  jackson2:
-    serialization:
-      write-durations-as-timestamps: false
+  jackson:
+    datatype:
+      datetime:
+        write-durations-as-timestamps: false
   cassandra:
     compression: NONE
   mail:

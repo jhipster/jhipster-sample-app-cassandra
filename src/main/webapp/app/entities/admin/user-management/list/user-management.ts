@@ -1,68 +1,113 @@
-import { HttpResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
+import { combineLatest, filter, map, tap } from 'rxjs';
 
-import { AccountService } from 'app/core/auth/account.service';
-import { Alert } from 'app/shared/alert/alert';
-import { AlertError } from 'app/shared/alert/alert-error';
+import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config';
+import { AccountService } from 'app/core/auth';
+import { Alert, AlertError } from 'app/shared/alert';
 import { TranslateDirective } from 'app/shared/language';
+import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 import { UserManagementService } from '../service/user-management.service';
 import { IUserManagement } from '../user-management.model';
 
 @Component({
-  selector: 'jhi-user-mgmt',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'jhi-user-management',
   templateUrl: './user-management.html',
-  imports: [RouterLink, FontAwesomeModule, AlertError, Alert, NgbPagination, TranslateDirective],
+  imports: [RouterLink, FontAwesomeModule, AlertError, Alert, SortDirective, SortByDirective, TranslateDirective],
 })
-export class UserManagement implements OnInit {
+export class UserManagement {
+  readonly userManagements = signal<IUserManagement[]>([]);
+
+  sortState = sortStateSignal({});
+
+  readonly router = inject(Router);
   readonly currentAccount = inject(AccountService).account;
-  readonly users = signal<IUserManagement[] | null>(null);
-  readonly isLoading = signal(false);
+  protected readonly userManagementService = inject(UserManagementService);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly isLoading = this.userManagementService.userManagementsResource.isLoading;
+  protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly activatedRouteState = toSignal(
+    combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      map(([queryParamMap, data]) => ({ queryParamMap, data })),
+    ),
+    { initialValue: { queryParamMap: this.activatedRoute.snapshot.queryParamMap, data: this.activatedRoute.snapshot.data } },
+  );
+  protected readonly sortService = inject(SortService);
+  protected modalService = inject(NgbModal);
 
-  private readonly userService = inject(UserManagementService);
-  private readonly modalService = inject(NgbModal);
-
-  ngOnInit(): void {
-    this.loadAll();
+  constructor() {
+    effect(() => {
+      this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
+    });
+    effect(() => {
+      const activatedRouteState = this.activatedRouteState();
+      untracked(() => {
+        // Only watch for route changes. Other signals should be ignored.
+        this.fillComponentAttributeFromRoute(activatedRouteState.queryParamMap, activatedRouteState.data);
+        this.load();
+      });
+    });
   }
 
-  setActive(userManagement: IUserManagement, isActivated: boolean): void {
-    this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
-  }
+  trackLogin = (item: IUserManagement): string => this.userManagementService.getUserManagementIdentifier(item);
 
-  trackIdentity(item: IUserManagement): string {
-    return item.id!;
-  }
-
-  deleteUser(userManagement: IUserManagement): void {
+  delete(userManagement: IUserManagement): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.userManagement = userManagement;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadAll();
-      }
-    });
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        tap(() => this.load()),
+      )
+      .subscribe();
   }
 
-  loadAll(): void {
-    this.isLoading.set(true);
-    this.userService.query().subscribe({
-      next: (res: HttpResponse<IUserManagement[]>) => {
-        this.isLoading.set(false);
-        this.onSuccess(res.body);
-      },
-      error: () => this.isLoading.set(false),
-    });
+  setActive(userManagement: IUserManagement, isActivated: boolean): void {
+    this.userManagementService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.load());
   }
 
-  private onSuccess(users: IUserManagement[] | null): void {
-    this.users.set(users);
+  load(): void {
+    this.queryBackend();
+  }
+
+  navigateToWithComponentValues(event: SortState): void {
+    this.handleNavigation(event);
+  }
+
+  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+  }
+
+  protected refineData(data: IUserManagement[]): IUserManagement[] {
+    const { predicate, order } = this.sortState();
+    return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: IUserManagement[]): IUserManagement[] {
+    return this.refineData(data);
+  }
+
+  protected queryBackend(): void {
+    const queryObject = {
+      sort: this.sortService.buildSortParam(this.sortState()),
+    };
+    this.userManagementService.userManagementsParams.set(queryObject);
+  }
+
+  protected handleNavigation(sortState: SortState): void {
+    const queryParamsObj = {
+      sort: this.sortService.buildSortParam(sortState),
+    };
+
+    this.router.navigate(['./'], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParamsObj,
+    });
   }
 }

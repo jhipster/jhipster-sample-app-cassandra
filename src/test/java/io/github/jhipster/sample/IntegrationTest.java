@@ -1,8 +1,7 @@
 package io.github.jhipster.sample;
 
 import io.github.jhipster.sample.config.AsyncSyncConfiguration;
-import io.github.jhipster.sample.config.EmbeddedCassandra;
-import io.github.jhipster.sample.config.JacksonConfiguration;
+import io.github.jhipster.sample.config.CassandraTestContainer;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,6 +13,5 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringBootTest(classes = { JhipsterCassandraSampleApplicationApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class })
-@EmbeddedCassandra
+@SpringBootTest(classes = { JhipsterCassandraSampleApplicationApp.class, AsyncSyncConfiguration.class, CassandraTestContainer.class })
 public @interface IntegrationTest {}

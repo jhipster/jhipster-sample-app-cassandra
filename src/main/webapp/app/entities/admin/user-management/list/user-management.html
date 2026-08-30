@@ -3,11 +3,17 @@
     <span jhiTranslate="userManagement.home.title">Users</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
         <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
         <span jhiTranslate="userManagement.home.refreshListLabel">Refresh list</span>
       </button>
-      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']" data-cy="entityCreateButton">
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-user-management"
+        [routerLink]="['/user-management/new']"
+      >
         <fa-icon icon="plus" />
         <span jhiTranslate="userManagement.home.createLabel">Create a new user</span>
       </button>
@@ -18,35 +24,48 @@
 
   <jhi-alert />
 
-  @if (users()) {
-    <div class="table-responsive">
-      <table class="table table-striped" aria-describedby="user-management-page-heading">
+  @if (userManagements().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="userManagement.home.notFound">No user found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
         <thead>
-          <tr>
-            <th scope="col">
-              <span jhiTranslate="global.field.id">ID</span>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="login">
+              <div class="d-flex">
+                <span jhiTranslate="userManagement.login">Login</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
             </th>
-            <th scope="col">
-              <span jhiTranslate="userManagement.login">Login</span>
-            </th>
-            <th scope="col">
-              <span jhiTranslate="userManagement.email">Email</span>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span jhiTranslate="userManagement.email">Email</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
             </th>
             <th scope="col"></th>
-            <th scope="col">
-              <span jhiTranslate="userManagement.langKey">Language</span>
+            <th scope="col" jhiSortBy="langKey">
+              <div class="d-flex">
+                <span jhiTranslate="userManagement.langKey">Language</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
             </th>
-            <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
+            <th scope="col">
+              <div class="d-flex">
+                <span jhiTranslate="userManagement.profiles">Profiles</span>
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          @for (userManagement of users(); track trackIdentity(userManagement)) {
+          @for (userManagement of userManagements(); track trackLogin(userManagement)) {
             <tr data-cy="entityTable">
               <td>
-                <a [routerLink]="['./', userManagement.login, 'view']">{{ userManagement.id }}</a>
+                <a [routerLink]="['/user-management', userManagement.login, 'view']">{{ userManagement.login }}</a>
               </td>
-              <td>{{ userManagement.login }}</td>
               <td>{{ userManagement.email }}</td>
               <td>
                 @if (!userManagement.activated) {
@@ -74,33 +93,30 @@
               </td>
               <td class="text-end">
                 <div class="btn-group">
-                  <button
-                    type="submit"
-                    [routerLink]="['./', userManagement.login, 'view']"
+                  <a
+                    [routerLink]="['/user-management', userManagement.login, 'view']"
                     class="btn btn-info btn-sm"
                     data-cy="entityDetailsButton"
                   >
                     <fa-icon icon="eye" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </button>
+                  </a>
 
-                  <button
-                    type="submit"
-                    [routerLink]="['./', userManagement.login, 'edit']"
-                    queryParamsHandling="merge"
+                  <a
+                    [routerLink]="['/user-management', userManagement.login, 'edit']"
                     class="btn btn-primary btn-sm"
                     data-cy="entityEditButton"
                   >
                     <fa-icon icon="pencil-alt" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </button>
+                  </a>
 
                   <button
-                    type="button"
-                    (click)="deleteUser(userManagement)"
+                    type="submit"
+                    (click)="delete(userManagement)"
                     class="btn btn-danger btn-sm"
-                    data-cy="entityDeleteButton"
                     [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
+                    data-cy="entityDeleteButton"
                   >
                     <fa-icon icon="times" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

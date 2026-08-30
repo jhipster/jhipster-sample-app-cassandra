@@ -1,33 +1,14 @@
+import { LANGUAGES } from 'app/config';
+
 export interface IUserManagement {
-  login: string;
   id?: string | null;
+  login: string;
   firstName?: string | null;
   lastName?: string | null;
-  email?: string;
-  activated?: boolean;
-  langKey?: string;
-  authorities?: string[];
-  createdBy?: string;
-  createdDate?: Date;
-  lastModifiedBy?: string;
-  lastModifiedDate?: Date;
+  email?: string | null;
+  activated?: boolean | null;
+  langKey?: (typeof LANGUAGES)[number] | null;
+  authorities?: string[] | null;
 }
 
-export class User implements IUserManagement {
-  constructor(
-    public login: string,
-    public id?: string | null,
-    public firstName?: string | null,
-    public lastName?: string | null,
-    public email?: string,
-    public activated?: boolean,
-    public langKey?: string,
-    public authorities?: string[],
-    public createdBy?: string,
-    public createdDate?: Date,
-    public lastModifiedBy?: string,
-    public lastModifiedDate?: Date,
-  ) {}
-}
-
-export type NewUserManagement = IUserManagement;
+export type NewUserManagement = Omit<IUserManagement, 'login'> & { login: null };

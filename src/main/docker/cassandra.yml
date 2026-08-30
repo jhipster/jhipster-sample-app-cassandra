@@ -2,7 +2,7 @@
 name: jhipstercassandrasampleapplication
 services:
   cassandra:
-    image: cassandra:5.0.8
+    image: cassandra:6.0
     container_name: jhipstercassandrasampleapplication-cassandra
     environment:
       - MAX_HEAP_SIZE=2G
