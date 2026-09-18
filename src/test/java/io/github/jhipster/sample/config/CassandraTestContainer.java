@@ -56,6 +56,13 @@ public class CassandraTestContainer {
             CqlSession session = new CqlSessionBuilder()
                 .addContactPoint(container.getContactPoint())
                 .withLocalDatacenter(container.getLocalDatacenter())
+                // CREATE KEYSPACE is a schema change and must reach schema agreement; the driver's 2s default request
+                // timeout is not enough on a loaded CI runner and fails the container startup with a DriverTimeoutException.
+                .withConfigLoader(
+                    DriverConfigLoader.programmaticBuilder()
+                        .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT_SECONDS))
+                        .build()
+                )
                 .build()
         ) {
             session.execute(

@@ -1,8 +1,8 @@
-CREATE KEYSPACE IF NOT EXISTS jhipsterCassandraSampleApplication
+CREATE KEYSPACE IF NOT EXISTS jhipstercassandrasampleapplication
     WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 }
     AND DURABLE_WRITES = true;
 
-CREATE TABLE IF NOT EXISTS jhipsterCassandraSampleApplication.schema_version (
+CREATE TABLE IF NOT EXISTS jhipstercassandrasampleapplication.schema_version (
     script_name text,
     checksum text,
     executed_by text,

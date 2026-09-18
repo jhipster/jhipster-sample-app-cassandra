@@ -32,9 +32,9 @@ spring:
     livereload:
       enabled: false
   cassandra:
-    contact-points: localhost
+    contact-points: 127.0.0.1
     compression: LZ4
-    keyspace-name: jhipsterCassandraSampleApplication
+    keyspace-name: jhipstercassandrasampleapplication
     local-datacenter: datacenter1
   mail:
     host: localhost

@@ -180,7 +180,7 @@ public class UserService {
      *
      * @param firstName first name of user.
      * @param lastName  last name of user.
-     * @param email     email id of user.
+     * @param email     email of user.
      * @param langKey   language key.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey) {

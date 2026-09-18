@@ -48,6 +48,6 @@ class UserServiceIT {
 
     @AfterEach
     void cleanupAndCheck() {
-        userRepository.deleteAll();
+        userService.deleteUser(DEFAULT_LOGIN);
     }
 }

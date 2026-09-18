@@ -9,6 +9,7 @@ import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import java.util.*;
@@ -56,6 +57,9 @@ class UserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -97,7 +101,10 @@ class UserResourceIT {
 
     @AfterEach
     void cleanupAndCheck() {
-        userRepository.deleteAll();
+        userService.deleteUser(DEFAULT_LOGIN);
+        userService.deleteUser(UPDATED_LOGIN);
+        userService.deleteUser(user.getLogin());
+        userService.deleteUser("anotherlogin");
     }
 
     @Test
